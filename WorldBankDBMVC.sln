@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldBankDBMVC", "WorldBankDBMVC\WorldBankDBMVC.csproj", "{777EC780-7ABE-47D6-ADF0-571B233172BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldBankDBMVC.DataAcess.EF", "WorldBankDBMVC.DataAcess.EF\WorldBankDBMVC.DataAcess.EF.csproj", "{7E22B654-7443-4B9C-9A1B-A5BE036200C8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{777EC780-7ABE-47D6-ADF0-571B233172BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{777EC780-7ABE-47D6-ADF0-571B233172BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{777EC780-7ABE-47D6-ADF0-571B233172BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{777EC780-7ABE-47D6-ADF0-571B233172BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E22B654-7443-4B9C-9A1B-A5BE036200C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E22B654-7443-4B9C-9A1B-A5BE036200C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E22B654-7443-4B9C-9A1B-A5BE036200C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E22B654-7443-4B9C-9A1B-A5BE036200C8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0CEB2D48-963A-43FE-BB81-22D5D8A10008}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,95 @@
+﻿
+@using WorldBankDBMVC.DataAcess.EF.Models
+@using WorldBankDBMVC.DataAcess.EF
+@{
+    ViewData["Title"] = "WorldBank-Admin";
+}
+
+<div class="text-center">
+    <h1 class="display-4"><span style="color:#40c9ff">World Bank</span> Admin</h1>
+</div>
+
+
+<script type="text/javascript">
+    function openLocation(url) {
+        window.location.href = url;
+    }
+
+    function confirmDelete(id) {
+        $("#hdnDeleteAccountId").val(id);
+        openModal("deleteModal");
+    }
+
+    function cancelDelete() {
+        $("#hdnDeleteAccountId").val(0);
+        closeModal("deleteModal");
+    }
+
+    function deleteAccount() {
+        var id = $("#hdnDeleteAccountId").val();
+        window.location.href = "/User/Delete/" + id;
+    }
+</script>
+
+<input type="hidden" id="hdnDeleteAccountId" value="0" />
+
+<div class="text-center">
+
+    <h1 class="display-4">School</h1>
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <table class="table">
+                <tr>
+                    <th>Account ID</th>
+                    <th>Username</th>
+                    <th>Email Address</th>
+                    <th>Password</th>
+                    <th>First Name</th>
+                    <th>Middle Name</th>
+                    <th>Last Name</th>
+                    <th>Checking Balance</th>
+                    <th>Savings Balance</th>
+                    <th colspan="2"><button type="button" onclick="javascript:openLocation('/User/SignUpPage')" class="btn btn-success btn-sm">ADD NEW ACCOUNT</button></th>
+                </tr>
+
+                @if (Model?.AccountLists != null)
+                {
+                    @foreach (Accounts accountList in Model.AccountLists)
+                    {
+                        <tr>
+                            <td>@accountList.AccountId</td>
+                            <td>@accountList.UserName</td>
+                            <td>@accountList.EmailAddress</td>
+                            <td>@accountList.Password</td>
+                            <td>@accountList.FirstName</td>
+                            <td>@accountList.MiddleName</td>
+                            <td>@accountList.LastName</td>
+                            <td>@accountList.CheckingBalance</td>
+                            <td>@accountList.SavingBalance</td>
+                            <td><button type="button" onclick="javascript:openLocation('/User/Update/@accountList.AccountId')" class="btn btn-secondary btn-sm">EDIT</button></td>
+                            <td><button type="button" onclick="javascript:confirmDelete(@accountList.AccountId)" class="btn btn-danger btn-sm">DELETE</button></td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <p>No accounts found.</p>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="deleteModal" class="modal fade" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <h5 class="modal-title">CONFIRM DELETE</h5>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this account?</p>
+                <button type="button" onclick="javascript:cancelDelete()" class="btn btn-secondary btn-sm">CANCEL</button>
+                <button type="button" onclick="javascript:deleteAccount()" class="btn btn-danger btn-sm">DELETE</button>
+            </div>
+        </div>
+    </div>
+</div>
+

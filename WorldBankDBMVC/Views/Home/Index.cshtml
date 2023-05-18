@@ -1,0 +1,56 @@
+﻿<link rel="stylesheet" href="~/css/homepage.css" />
+@model AccountViewModel
+@using WorldBankDBMVC.DataAcess.EF.Models
+@using WorldBankDBMVC.DataAcess.EF
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to <span style="color:#40c9ff">World Bank</span></h1>
+    <p>Learn about <a href="#">The world's best international bank</a>.</p>
+</div>
+
+<form method="post">
+    <div class="fContainer">
+        <label class="display-4 fHeader"  style="margin-bottom:5rem;">Login Page</label>
+        <div>
+            <label class="fItems">Username: </label>
+            <input class="fItems" type="text" placeholder="Enter User Name" name="UserName" asp-for="UserName" />
+        </div>
+        <div>
+            <label class="fItems">Password: </label>
+            <input class="fItems" type="password" id="passID" placeholder="Enter Password" name="Password" asp-for="Password" />
+        </div>
+     
+        <div class="fItems">
+            <input class="" type="checkbox"  onclick="showPass()"/>
+            <label>Show Password</label>
+        </div>
+        <div class="fItems">
+            <a href="#">Forgot Password</a>
+        </div>
+
+        @if (ViewBag.Message != null && ViewBag.Message == "Exist")
+        {
+            <p>Exist</p>
+            <script>console.log("Exist");</script>
+        }
+        else if(ViewBag.Message != null && ViewBag.Message =="ExistNot")
+        {
+            <p>Non Existing</p>
+            <script>console.log("does not exist ");</script>
+        }
+        else
+        {
+            <!--So that nothing shows up in the form until user click either the login or sign up button-->
+        }
+
+        <center >
+            <button class="fItems fButtons" type="submit" asp-controller="Home" asp-action="Index">Login</button>
+            <button class="fItems fButtons" type="submit" asp-controller="Home" asp-action="SignUp">Sign Up</button>
+        </center>
+    </div>
+</form>

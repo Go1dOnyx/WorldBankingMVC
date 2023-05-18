@@ -1,0 +1,53 @@
+﻿<link rel="stylesheet" href="~/css/signupform.css" />
+
+@model SignUpViewModel
+@{
+    ViewData["Title"] = "sign Up";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Sign Up to <span style="color:#40c9ff">World Bank</span></h1>
+    <p>Learn about <a href="#">The world's best international bank</a>.</p>
+</div>
+
+<form method="post">
+   <div class="fSignUpForm">
+       <div class="contentAlignment"> 
+            <h2>Credentials</h2>
+            <div class="fSignColumns">
+                <label class="fItems">Email Address: </label>
+                <input class="fItems" type="text" asp-for="EmailAddress"/>
+                <label class="fItems">Username: </label>
+                <input class="fItems" type="text" asp-for="UserName"/>
+                <label class="fItems">Password: </label>
+                <input class="fItems" type="password" asp-for="Password"/>
+            </div>
+            <h2>Personal </h2>
+            <div class="fSignColumns ">
+                <label class="fItems">First Name: </label>
+                <input class="fItems" type="text" asp-for="FirstName"/>
+                <label class="fItems">Middle Name: </label>
+                <input class="fItems" type="text" asp-for="MiddleName"/>
+                <label class="fItems">Last Name: </label>
+                <input class="fItems" type="text" asp-for="LastName"/>
+            </div>
+            <h2>Account</h2>
+            <div class="fSignColumns ">
+                <label class="fItems">Checking Balance Deposit: </label>
+                <input class="fItems" type="number" min="0" asp-for="CheckingBalance"/>
+                <label class="fItems">Savings Balance Deposit: </label>
+                <input class="fItems" type="number" min="0" asp-for="SavingsBalance"/>
+            </div>
+            @if (ViewBag.Message != null && ViewBag.Message == "ExistingAccount")
+            {
+                <script>alert("Account Exists Already");</script>
+                
+            }
+
+           <center>
+                <button class="fButtons" asp-action="Back" asp-controller="SignUp">Back</button>
+                <button class="fButtons" type="submit" asp-action="CreateRecord" asp-controller="SignUp">Sign Up</button>
+            </center>
+       </div>
+   </div>
+</form>

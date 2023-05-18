@@ -1,0 +1,56 @@
+.mainPanel {
+    border: 1px solid #ccf7ff;
+    border-radius: 5px;
+    background-color: #d4f6fc;
+    padding: 10px;
+    box-shadow: 5px 10px #aceefa;
+}
+
+.formHeader {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background-color: #5498f7;
+    color: white;
+    padding: 10px;
+    margin-bottom: 20px;
+    margin-top: -10px;
+    margin-left: -10px;
+    margin-right: -10px;
+}
+
+.fItems {
+    display: block;
+}
+
+.fAccountContents {
+    margin: 1rem;
+}
+
+.formBtn {
+    margin: 1rem;
+}
+
+.formBtnIn {
+    margin-top: 1rem;
+}
+
+.fSubBtn {
+    display: inline;
+    border-radius: 4px;
+    border: 1px solid;
+    background-color: lightskyblue;
+    color: white;
+    margin-top: 2rem;
+    height: 3rem;
+    width: 30rem;
+    font-family: monospace;
+}
+
+.fPopUp {
+    margin: 10px;
+}
+
+.fPopUpItems {
+    display: block;
+    margin: 5px;
+}

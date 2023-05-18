@@ -1,0 +1,106 @@
+﻿<link rel="stylesheet" href="~/css/userform.css" />
+@model AccountViewModel
+@using WorldBankDBMVC.DataAcess.EF.Models
+@using WorldBankDBMVC.DataAcess.EF
+@{
+    ViewData["Title"] = "WorldBank-User";
+}
+
+<div class="text-center" style="margin-bottom: 20px;">
+    <h1 class="display-4">Welcome @Model.FirstName To <span style="color:#40c9ff">World Bank</span>!</h1>
+</div>
+
+    <div class="mainPanel">
+        <div class="formHeader">
+            <h1>World Bank Accounts</h1>
+        </div>
+        <div class="acctInfo">
+            <h3>Username: @Model.UserName</h3>
+            <h3>Account ID: @Model.AccountID</h3>
+            <label>@Model.LastName, @Model.FirstName @Model.MiddleName?.Substring(0, 1).</label>
+        </div>
+
+        <!-----Checking Accout----------->
+        <div class="fAccountContents checkContent">
+            <label class="fItems">Checking Balance: </label>
+            <input class="fItems" type="text" for="depositAmount" value="@Model.CheckingAccount" readonly />
+
+
+            <!-----Deposit PopUp-->
+            <div class="fPopUp" id="popUpDeposit" style="display: none;">
+                <form method="post">
+                    <input type="hidden" name="id" value="@Model.AccountID" />
+
+                    <label class="fPopUpItems">Enter Number To Deposit: </label>
+                    <input class="fPopUpItems" type="number" name="amount" placeholder="Enter Number" />
+
+                    <input type="button" onclick="showDepositPopup()" value="Cancel" />
+                    <button type="submit" formaction="@Url.Action("Deposit", "Home")" formmethod="post">OK</button>
+                </form>
+            </div>
+            <!---Widthdraw PopUp-->
+            <div class="fPopUp" id="popUpWithdraw" style="display: none;">
+                <form method="post">
+                    <input type="hidden" name="id" value="@Model.AccountID" />
+
+                    <label class="fPopUpItems">Enter Number To Withdraw: </label>
+                    <input class="fPopUpItems" type="number" name="amount" placeholder="Enter Number" />
+
+                    <input type="button" onclick="showWithdrawPopup()" value="Cancel" />
+                    <button type="submit" formaction="@Url.Action("Withdraw","Home")" formmethod="post">OK</button>
+                </form>
+            </div>
+            <!--------------------------------------->
+
+            <div class="formBtnIn">
+                <input type="button" onclick="showDepositPopup()"  value="Make Deposit">
+                <input type="button" onclick="showWithdrawPopup()" value="Withdraw">
+            </div>
+        </div>
+
+
+        <!----------------Saving Account-------------->
+        <div class="fAccountContents savContent">
+            <label class="fItems">Savings Balance: </label>
+            <input class="fItems" type="text" value="@Model.SavingsAccount" readonly />
+
+            <!-----Deposit PopUp-->
+            <div class="fPopUp" id="popUpDepSav" style="display: none;">
+                <form method="post">
+                    <input type="hidden" name="id" value="@Model.AccountID" />
+
+                    <label class="fPopUpItems">Enter Number To Deposit: </label>
+                    <input class="fPopUpItems" type="number" name="amount" placeholder="Enter Number" />
+
+                    <input type="button" onclick="showDepositPopSav()" value="Cancel" />
+                    <button type="submit" formaction="@Url.Action("DepositSaving","Home")" formmethod="post">OK</button>
+                </form>
+            </div>
+            <!---Widthdraw PopUp-->
+            <div class="fPopUp" id="popUpWithSav" style="display: none;">
+                <form method="post">
+                    <input type="hidden" name="id" value="@Model.AccountID" />
+
+                    <label class="fPopUpItems">Enter Number To Withdraw: </label>
+                    <input class="fPopUpItems" type="number" name="amount" placeholder="Enter Number" />
+
+                    <input type="button" onclick="showWithdrawPopSav()" value="Cancel" />
+                    <button type="submit" formaction="@Url.Action("WithdrawSaving","Home")" formmethod="post">OK</button>
+                </form>
+            </div>
+            <!---------------------------------------->
+
+            <div class="formBtnIn">
+                <input type="button" onclick="showDepositPopSav()" value="Make Deposit" />
+                <input type="button" onclick="showWithdrawPopSav()" value="Withdraw" />
+            </div>
+        </div>
+
+        <div class="formBtn" style="margin-top:50px;">
+            <form method="post">
+                <button class="fSubBtn" asp-action="Back" asp-controller="Home">Back</button>
+                <button class="fSubBtn">Make Changes</button>
+            </form>
+        </div>
+    </div>
+

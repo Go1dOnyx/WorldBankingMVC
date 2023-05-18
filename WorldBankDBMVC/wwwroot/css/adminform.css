@@ -1,0 +1,38 @@
+.fContainer {
+    border: 1px solid #ccf7ff;
+    border-radius: 3px;
+    background-color: #d4f6fc;
+    padding: 10px;
+    box-shadow: 5px 10px #aceefa;
+}
+
+.fHeader {
+    background-color: #5498f7;
+    color: white;
+    padding: 1rem;
+    width: 100%;
+    display: block;
+    margin: 0px;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+
+.fItems {
+    display: block;
+    margin: 10px;
+}
+
+.fButtons {
+    display: inline;
+    border-radius: 4px;
+    border: 1px solid;
+    background-color: lightskyblue;
+    color: white;
+    margin-top: 2rem;
+    height: 3rem;
+    width: 30rem;
+    font-family: monospace;
+}
+
+    .fButtons:hover {
+        background-color: #77b3fc;
+    }

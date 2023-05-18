@@ -1,0 +1,84 @@
+﻿<link rel="stylesheet" href="~/css/adminform.css" />
+@model AccountViewModel
+@using WorldBankDBMVC.DataAcess.EF.Models
+@using WorldBankDBMVC.DataAcess.EF
+
+@{
+    ViewData["Title"] = "Admin";
+}
+
+<form method="post">
+    <h1 class="text-center display-4" style="margin-bottom: 5rem">World Bank Records</h1>
+    <div class="fContainer">
+        <div class="text-center" style="padding: 10px;">
+            <div class="row">
+                <div class="col-md-10 offset-md-1">
+                    <table class="table">
+                        <tr>
+                            <th>Account ID</th>
+                            <th>Username</th>
+                            <th>Email Address</th>
+                            <th>Password</th>
+                            <th>First Name</th>
+                            <th>Middle Name</th>
+                            <th>Last Name</th>
+                            <th>Checking Balance</th>
+                            <th>Savings Balance</th>
+                            <th colspan="2"><button type="submit" asp-controller="Admin" asp-action="SignUp" class="btn btn-success btn-sm">ADD NEW ACCOUNT</button></th>
+                        </tr>
+
+                        @if (Model?.GetAccountList != null)
+                        {
+                            @foreach (Accounts accountList in Model.GetAccountList)
+                            {
+                                @if ((accountList.AccountId == 100009 && accountList.UserName == "Admin1" ) || (Model.AdminNameList.Contains(accountList.UserName)))
+                                {
+                                    <tr style="background-color:#badfff">
+                                        <td>Current</td>
+                                        <td>User</td>
+                                        <td>Cannot</td>
+                                        <td>Be</td>
+                                        <td>Displayed</td>
+                                        <td>Due</td>
+                                        <td>To</td>
+                                        <td>Crucial</td>
+                                        <td>Information</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>@accountList.AccountId</td>
+                                        <td>@accountList.UserName</td>
+                                        <td>@accountList.EmailAddress</td>
+                                        <td>@accountList.Password</td>
+                                        <td>@accountList.FirstName</td>
+                                        <td>@accountList.MiddleName</td>
+                                        <td>@accountList.LastName</td>
+                                        <td>@accountList.CheckingBalance</td>
+                                        <td>@accountList.SavingBalance</td>
+                                        <td><button type="button" onclick="javascript:openLocation('/User/Update/@accountList.AccountId')" class="btn btn-secondary btn-sm">EDIT</button></td>
+                                        <td><button type="button" onclick="javascript:confirmDelete(@accountList.AccountId)" class="btn btn-danger btn-sm">DELETE</button></td>
+                                    </tr>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            <p>No accounts found.</p>
+                        }
+                    </table>
+                </div>
+            </div>
+
+            <div>
+                <center>
+                    <button class="fItems fButtons" type="submit" asp-controller="Admin" asp-action="Back">Back</button>
+                    <button class="fItems fButtons" type="submit" asp-controller="Admin" asp-action="Index">Make Changes</button>
+                </center>
+            </div>
+        </div>
+    </div>
+</form>
