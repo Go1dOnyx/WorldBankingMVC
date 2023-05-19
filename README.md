@@ -9,5 +9,4 @@ Changes you need to make
   a.)Inside the WorldBankDBMVC in the appsettings.json 
   b.)Inside the WorldBankDBMVC.Database.EF in Context folder and in the WorldBankDBMVC context file change the connection string
      under the OnConfiguring method
-  
-3.)
+3.) Connection String - Server=* change to local machine location*;Database=WorldBankDB;Trusted_Connection=True;
