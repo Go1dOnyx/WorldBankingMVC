@@ -16,4 +16,6 @@ Changes you need to make
     b.)Inside the WorldBankDBMVC.Database.EF in Context folder and in the WorldBankDBMVC context file change the connection string
      under the OnConfiguring method
      
-3.) Example on how you should change the Connection String:  Server=* change to local machine location*;Database=WorldBankDB;Trusted_Connection=True;
+3.) Example on how you should change the Connection String:  
+
+    Server=* change to local machine location*;Database=WorldBankDB;Trusted_Connection=True;
