@@ -13,6 +13,6 @@ namespace WorldBankDB.DataAccess.EF.Repositories.Contract
         Task<Users> UpdateUserAsync(Users user);
         Task<Users> GetUserByIdAsync(Guid userID);
         Task<List<Users>> GetAllUsersAsync();
-        Task<bool> DeleteUserAsync(Guid userID);
+        Task<bool> DeleteUserAsync(Users user);
     }
 }
