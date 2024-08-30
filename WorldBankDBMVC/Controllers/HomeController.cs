@@ -1,8 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using WorldBankDBMVC.DataAcess.EF.Context;
-using WorldBankDBMVC.DataAcess.EF.Models;
-using WorldBankDBMVC.DataAcess.EF.Repositories;
 using WorldBankDBMVC.Models;
 
 namespace WorldBankDBMVC.Controllers
@@ -10,11 +6,10 @@ namespace WorldBankDBMVC.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly WorldBankDBContext _dbContext;
-        public HomeController(ILogger<HomeController> logger,WorldBankDBContext dbContext)
+        //private readonly WorldBankDBContext _dbContext;
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _dbContext = dbContext;
         }
 
         public IActionResult Index()
@@ -23,8 +18,73 @@ namespace WorldBankDBMVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(AccountViewModel accountModel) {
-            ViewBag.Message = null;
+        public IActionResult Index(AccountViewModel accountModel) 
+        {
+           
+        }
+
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+        /*
+        public IActionResult Admin( AccountViewModel model) {
+            return View("~/Views/Admin/Index.cshtml", model);
+        }
+        public IActionResult Users(AccountViewModel model) {
+            return View("~/Views/Users/Index.cshtml",model);
+        }
+        [HttpPost]
+        public IActionResult Deposit(int id, decimal amount) {
+            Accounts account = _dbContext.Accounts.Find(id);
+            account.CheckingBalance += amount;
+            _dbContext.SaveChanges();
+
+            return RedirectToAction("Users", account);
+        }
+        [HttpPost]
+        public IActionResult Withdraw(int id, decimal amount) {
+            Accounts account = _dbContext.Accounts.Find(id);
+            account.CheckingBalance = account.CheckingBalance - amount;
+            _dbContext.SaveChanges();
+
+            return RedirectToAction("Users", account);
+        }
+        [HttpPost]
+        public IActionResult DepositSaving(int id, decimal amount) {
+            Accounts account = _dbContext.Accounts.Find(id);
+            account.SavingBalance += amount;
+            _dbContext.SaveChanges();
+
+            return RedirectToAction("Users", account);
+        }
+        [HttpPost]
+        public IActionResult WithdrawSaving(int id, decimal amount)
+        {
+            Accounts account = _dbContext.Accounts.Find(id);
+            account.SavingBalance -= amount;
+            _dbContext.SaveChanges();
+
+            return RedirectToAction("Users", account);
+        }
+        public IActionResult SignUp() { 
+            return View("~/Views/SignUp/SignUp.cshtml");
+        }
+        public IActionResult Back() {
+            return View("Index");
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        */
+    }
+}
+
+/*
+     ViewBag.Message = null;
             string UserName = accountModel.UserName;
             string Password = accountModel.Password;
 
@@ -80,62 +140,4 @@ namespace WorldBankDBMVC.Controllers
             }   
 
             return View(accountModel);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-        public IActionResult Admin( AccountViewModel model) {
-            return View("~/Views/Admin/Index.cshtml", model);
-        }
-        public IActionResult Users(AccountViewModel model) {
-            return View("~/Views/Users/Index.cshtml",model);
-        }
-        [HttpPost]
-        public IActionResult Deposit(int id, decimal amount) {
-            Accounts account = _dbContext.Accounts.Find(id);
-            account.CheckingBalance += amount;
-            _dbContext.SaveChanges();
-
-            return RedirectToAction("Users", account);
-        }
-        [HttpPost]
-        public IActionResult Withdraw(int id, decimal amount) {
-            Accounts account = _dbContext.Accounts.Find(id);
-            account.CheckingBalance = account.CheckingBalance - amount;
-            _dbContext.SaveChanges();
-
-            return RedirectToAction("Users", account);
-        }
-        [HttpPost]
-        public IActionResult DepositSaving(int id, decimal amount) {
-            Accounts account = _dbContext.Accounts.Find(id);
-            account.SavingBalance += amount;
-            _dbContext.SaveChanges();
-
-            return RedirectToAction("Users", account);
-        }
-        [HttpPost]
-        public IActionResult WithdrawSaving(int id, decimal amount)
-        {
-            Accounts account = _dbContext.Accounts.Find(id);
-            account.SavingBalance -= amount;
-            _dbContext.SaveChanges();
-
-            return RedirectToAction("Users", account);
-        }
-        public IActionResult SignUp() { 
-            return View("~/Views/SignUp/SignUp.cshtml");
-        }
-        public IActionResult Back() {
-            return View("Index");
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-    }
-}
+ */
