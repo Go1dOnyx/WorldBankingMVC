@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WorldBankDBMVC.DataAcess.EF.Context;
-using WorldBankDBMVC.DataAcess.EF.Models;
-using WorldBankDBMVC.DataAcess.EF.Repositories;
+//using WorldBankDBMVC.DataAcess.EF.Context;
+//using WorldBankDBMVC.DataAcess.EF.Models;
+//using WorldBankDBMVC.DataAcess.EF.Repositories;
 using WorldBankDBMVC.Models;
 using System.Net.Mail;
 using Microsoft.IdentityModel.Tokens;
@@ -9,7 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace WorldBankDBMVC.Controllers
 {
     public class SignUpController : Controller
-    {
+    {/*
         private WorldBankDBContext _dbContext;
         public SignUpController(WorldBankDBContext DbContext) { 
             _dbContext = DbContext;

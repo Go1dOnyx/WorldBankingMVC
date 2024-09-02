@@ -1,12 +1,12 @@
-﻿using WorldBankDBMVC.DataAcess.EF.Models;
-using WorldBankDBMVC.DataAcess.EF.Repositories;
-using WorldBankDBMVC.DataAcess.EF.Context;
+﻿//using WorldBankDBMVC.DataAcess.EF.Models;
+//using WorldBankDBMVC.DataAcess.EF.Repositories;
+//using WorldBankDBMVC.DataAcess.EF.Context;
 
 namespace WorldBankDBMVC.Models
 {
     public class AdminViewModel
     {
-        private WorldBankRespository _bankRepo;
+       /* private WorldBankRespository _bankRepo;
 
         public List<Accounts> AccountList { get; set; }
 
@@ -69,6 +69,7 @@ namespace WorldBankDBMVC.Models
         {
             return _bankRepo.GetAccountById( acctID);
         }
+       */
     }
 }
 

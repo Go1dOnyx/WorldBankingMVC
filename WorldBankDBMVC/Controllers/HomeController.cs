@@ -17,11 +17,11 @@ namespace WorldBankDBMVC.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Index(AccountViewModel accountModel) 
-        {
+      //  [HttpPost]
+     //   public IActionResult Index(AccountViewModel accountModel) 
+      //  {
            
-        }
+       // }
 
         public IActionResult Privacy()
         {

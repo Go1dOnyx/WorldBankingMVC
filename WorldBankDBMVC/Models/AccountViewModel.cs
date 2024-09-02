@@ -1,7 +1,7 @@
 ﻿using System.Net;
-using WorldBankDBMVC.DataAcess.EF.Context;
-using WorldBankDBMVC.DataAcess.EF.Models;
-using WorldBankDBMVC.DataAcess.EF.Repositories;
+//using WorldBankDBMVC.DataAcess.EF.Context;
+//using WorldBankDBMVC.DataAcess.EF.Models;
+//using WorldBankDBMVC.DataAcess.EF.Repositories;
 
 namespace WorldBankDBMVC.Models
 {
@@ -18,7 +18,7 @@ namespace WorldBankDBMVC.Models
         public decimal SavingsAccount { get; set; }
 
         //Admin Class Properties 
-        public List<Accounts> GetAccountList { get; set; } 
+       // public List<Accounts> GetAccountList { get; set; } 
         //Checking User roles 
         public UserRoles AccountRules { get; set; }
         public string[] AdminNameList = {"Admin1","Admin2","Admin3","Admin4"};
