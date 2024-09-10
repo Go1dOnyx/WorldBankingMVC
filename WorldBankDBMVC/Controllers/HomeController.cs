@@ -17,6 +17,11 @@ namespace WorldBankDBMVC.Controllers
             return View();
         }
 
+        public IActionResult LoginForm(LoginViewModel model) 
+        {
+            return View();
+        }
+
       //  [HttpPost]
      //   public IActionResult Index(AccountViewModel accountModel) 
       //  {

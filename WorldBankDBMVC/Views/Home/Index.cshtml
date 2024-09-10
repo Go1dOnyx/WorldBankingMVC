@@ -1,4 +1,5 @@
 ﻿<link rel="stylesheet" href="~/css/homepage.css" />
+@model LoginViewModel 
 
 @{
     ViewData["Title"] = "Home";
@@ -8,3 +9,18 @@
      <h1>Welcome to the <span style="color:red;">ZymBank</span></h1>
      <p>Learn more about the international <a href="#">ZymBank</a></p>
 </div>
+
+@using (Html.BeginForm("LoginForm","Home", FormMethod.Post, new { @class = "shadow")) 
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.UserEmail)
+        @Html.TextBoxFor(m => m.UserEmail)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Password)
+        @Html.TextBoxFor(m => m.Password)
+    </div>
+
+    <button class="" type="submit">Login</button>
+}
