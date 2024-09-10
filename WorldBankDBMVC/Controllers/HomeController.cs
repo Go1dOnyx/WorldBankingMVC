@@ -1,15 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WorldBankDBMVC.Models;
+using WorldBankDB.DataAccess.EF.Context;
 
 namespace WorldBankDBMVC.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        //private readonly WorldBankDBContext _dbContext;
-        public HomeController(ILogger<HomeController> logger)
+        private readonly WorldBankDBContext _dbContext;
+        public HomeController(ILogger<HomeController> logger, WorldBankDBContext dbContext)
         {
             _logger = logger;
+            _dbContext = dbContext;
         }
 
         public IActionResult Index()
@@ -17,8 +19,11 @@ namespace WorldBankDBMVC.Controllers
             return View();
         }
 
-        public IActionResult LoginForm(LoginViewModel model) 
+        [HttpPost]
+        public IActionResult LoginForm(string userEmail, string pass) 
         {
+            LoginViewModel model = new LoginViewModel(userEmail, pass);
+
             return View();
         }
 
