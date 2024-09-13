@@ -6,25 +6,25 @@ namespace WorldBankDBMVC.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly WorldBankDBContext _dbContext;
-        public HomeController(ILogger<HomeController> logger, WorldBankDBContext dbContext)
+        private readonly ILogger<HomeController> _logger;
+        public HomeController(WorldBankDBContext dbContext, ILogger<HomeController> logger)
         {
-            _logger = logger;
             _dbContext = dbContext;
+            _logger = logger;
         }
 
         public IActionResult Index()
         {
+            ViewBag.Message = null;
             return View();
         }
 
         [HttpPost]
-        public IActionResult LoginForm(string userEmail, string pass) 
+        public IActionResult LoginForm([FromForm]LoginViewModel model) 
         {
-            LoginViewModel model = new LoginViewModel(userEmail, pass);
-
-            return View();
+            ViewBag.Message = model.UserEmail + ", " + model.Password;
+            return View("Index");
         }
 
       //  [HttpPost]

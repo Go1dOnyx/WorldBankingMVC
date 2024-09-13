@@ -1,4 +1,4 @@
-//using WorldBankDBMVC.DataAcess.EF.Context;
+using WorldBankDB.DataAccess.EF.Context;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +8,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddMvc();
 
 //Adds configuration from the appsettings. json file
-/*
+
 IConfiguration configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .AddEnvironmentVariables().Build();
@@ -19,7 +19,7 @@ builder.Services.AddDbContext<WorldBankDBContext>(
     }
     );
 
-*/
+
 
 var app = builder.Build();
 
