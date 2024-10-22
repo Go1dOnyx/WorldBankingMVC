@@ -1,6 +1,5 @@
 using WorldBankDB.DataAccess.EF.Context;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using WorldBankDB.DataAccess.EF.Models;
 
