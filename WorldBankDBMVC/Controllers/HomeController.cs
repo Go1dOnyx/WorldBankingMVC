@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WorldBankDBMVC.Models;
 using WorldBankDB.DataAccess.EF.Context;
+using WorldBankDB.DataAccess.EF.Repositories;
 
 namespace WorldBankDBMVC.Controllers
 {
@@ -8,9 +9,11 @@ namespace WorldBankDBMVC.Controllers
     {
         private readonly WorldBankDBContext _dbContext;
         private readonly ILogger<HomeController> _logger;
-        public HomeController(WorldBankDBContext dbContext, ILogger<HomeController> logger)
+        private readonly UserRepository _userRepository;
+        public HomeController(WorldBankDBContext dbContext, UserRepository userRepository, ILogger<HomeController> logger)
         {
             _dbContext = dbContext;
+            _userRepository = userRepository;
             _logger = logger;
         }
 

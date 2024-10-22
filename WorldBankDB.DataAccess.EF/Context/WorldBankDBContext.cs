@@ -1,7 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using WorldBankDB.DataAccess.EF.Models;
+using Microsoft.AspNetCore.Identity;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
 // If you have enabled NRTs for your project, then un-comment the following line:
@@ -9,7 +11,7 @@ using WorldBankDB.DataAccess.EF.Models;
 
 namespace WorldBankDB.DataAccess.EF.Context
 {
-    public partial class WorldBankDBContext : DbContext
+    public partial class WorldBankDBContext : IdentityDbContext<IdentityUser>
     {
         public WorldBankDBContext()
         {
@@ -29,7 +31,6 @@ namespace WorldBankDB.DataAccess.EF.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Server=(LocalDb)\\MSSQLLocalDB;Database=WorldBankDB;Trusted_Connection=True;");
             }
         }

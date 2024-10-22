@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
@@ -7,7 +8,7 @@ using System.Collections.Generic;
 
 namespace WorldBankDB.DataAccess.EF.Models
 {
-    public partial class Users
+    public partial class Users: IdentityUser
     {
         public Guid UserId { get; set; }
         public string? Username { get; set; }

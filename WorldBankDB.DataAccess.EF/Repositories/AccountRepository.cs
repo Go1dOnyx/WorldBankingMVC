@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WorldBankDB.DataAccess.EF.Repositories
 {
-    internal class AccountRepository: IAccountRepository
+    public class AccountRepository: IAccountRepository
     {
         private WorldBankDBContext _context;
         public AccountRepository(WorldBankDBContext context) 

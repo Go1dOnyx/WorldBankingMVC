@@ -1,11 +1,18 @@
 using WorldBankDB.DataAccess.EF.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using WorldBankDB.DataAccess.EF.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddMvc();
+
+//Add services for authentication and authorization
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication().AddCookie();
 
 //Adds configuration from the appsettings. json file
 
@@ -19,9 +26,13 @@ builder.Services.AddDbContext<WorldBankDBContext>(
     }
     );
 
-
+builder.Services.AddIdentity<Users, IdentityRole>()
+    .AddEntityFrameworkStores<WorldBankDBContext>()
+    .AddDefaultTokenProviders();
 
 var app = builder.Build();
+
+app.MapIdentityApi<Users>();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -40,6 +51,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}"
+);
 
 app.Run();

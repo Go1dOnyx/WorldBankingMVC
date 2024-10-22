@@ -12,7 +12,7 @@ using System.ComponentModel;
 
 namespace WorldBankDB.DataAccess.EF.Repositories
 {
-    internal class AddressRepository: IAddressRepository
+    public class AddressRepository: IAddressRepository
     {
         private WorldBankDBContext _context;
         public AddressRepository(WorldBankDBContext context) 

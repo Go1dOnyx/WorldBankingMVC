@@ -7,37 +7,68 @@ using WorldBankDB.DataAccess.EF.Context;
 using WorldBankDB.DataAccess.EF.Models;
 using WorldBankDB.DataAccess.EF.Repositories.Contract;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace WorldBankDB.DataAccess.EF.Repositories
 {
-    internal class UserRepository : IUserRepository
+    public class UserRepository : IUserRepository
     {
-        private WorldBankDBContext _context;
+        private readonly WorldBankDBContext _context;
+        private readonly UserManager<Users> _userManager;
+        private readonly SignInManager<Users> _signInManager;
 
-        public UserRepository(WorldBankDBContext context)
+        public UserRepository(WorldBankDBContext context, UserManager<Users> userManager, SignInManager<Users> singInManager)
         {
             _context = context;
+            _userManager = userManager;
+            _signInManager = singInManager;
         }
-        public async Task<Users> CreateUserAsync(Users user)
+
+        //Methods using Identity
+        public async Task<IdentityResult> CreateUserAsync(Users user)
         {
-            if (user != null)
+            var result = await _userManager.CreateAsync(user);
+            try 
             {
-                try
+                if (result.Succeeded)
                 {
-                    await _context.AddAsync(user);
+                    await _context.AddAsync(result);
                     await _context.SaveChangesAsync();
                     await _context.DisposeAsync();
 
-                    return user;
+                    return IdentityResult.Success;
                 }
-                catch (Exception ex)
-                {
-                    throw new InvalidOperationException($"User could not be created. Error {ex.Message}");
-                }
+
+                return IdentityResult.Failed(result.Errors.ToArray());
+            }
+            catch (Exception ex) 
+            {
+                return IdentityResult.Failed(new IdentityError { Description = $"An error occurred when creating user: {ex.Message}" });
             }
 
-            throw new InvalidOperationException("Invalid model data.");
         }
+
+        public async Task<SignInResult> LoginUserAsync(string userEmail, string pass, bool isPersistent, bool lockoutOnFailure) 
+        {
+            var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null) 
+            {
+                user = await _userManager.FindByNameAsync(userEmail);
+            }
+            if (user != null) 
+            {
+                return await _signInManager.PasswordSignInAsync(userEmail, pass, isPersistent: false, lockoutOnFailure: false);
+            }
+
+            return SignInResult.Failed;
+        }
+        public async Task SignOutUserAsync() 
+        {
+            await _signInManager.SignOutAsync();
+        }
+
+        //Regular Methods 
         public async Task<Users> UpdateUserAsync(Users user) 
         {
             Users updateUser = await _context.Users.FindAsync(user.UserId);
