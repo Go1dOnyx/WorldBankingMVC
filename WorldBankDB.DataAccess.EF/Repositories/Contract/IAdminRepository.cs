@@ -7,7 +7,7 @@ using WorldBankDB.DataAccess.EF.Models;
 
 namespace WorldBankDB.DataAccess.EF.Repositories.Contract
 {
-    internal interface IAdminRepository
+    public interface IAdminRepository
     {
         Task<Admins> CreateAdminAsync(Admins admin); //=> throw new NotImplementedException();
         Task<Admins> UpdateAdminAsync(Admins admin);

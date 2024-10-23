@@ -7,7 +7,7 @@ using WorldBankDB.DataAccess.EF.Models;
 
 namespace WorldBankDB.DataAccess.EF.Repositories.Contract
 {
-    internal interface IAccountRepository
+    public interface IAccountRepository
     {
         Task<Accounts> CreateAccountAsync(Accounts acct);
         Task<Accounts> UpdateAccountAsync(Accounts acct);

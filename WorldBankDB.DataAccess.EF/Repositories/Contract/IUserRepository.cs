@@ -8,7 +8,7 @@ using WorldBankDB.DataAccess.EF.Models;
 
 namespace WorldBankDB.DataAccess.EF.Repositories.Contract
 {
-    internal interface IUserRepository
+    public interface IUserRepository
     {
         //Identity use methods
         Task<IdentityResult> CreateUserAsync(Users user);

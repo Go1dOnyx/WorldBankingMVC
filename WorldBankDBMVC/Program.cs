@@ -1,7 +1,10 @@
 using WorldBankDB.DataAccess.EF.Context;
+using WorldBankDB.DataAccess.EF.Models;
+using WorldBankDB.DataAccess.EF.Repositories;
+using WorldBankDB.DataAccess.EF.Repositories.Contract;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using WorldBankDB.DataAccess.EF.Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,11 +16,18 @@ builder.Services.AddMvc();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication().AddCookie();
 
-//Adds configuration from the appsettings. json file
+//DI Container Services
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
+//Adds configuration from the appsettings.json file
 IConfiguration configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .AddEnvironmentVariables().Build();
+
+//Add DbContext configuration with connection string 
 builder.Services.AddDbContext<WorldBankDBContext>(
     optionsAction =>
     {
@@ -25,6 +35,8 @@ builder.Services.AddDbContext<WorldBankDBContext>(
     }
     );
 
+
+//Setup Identity system with rules
 builder.Services.AddIdentity<Users, IdentityRole>(options =>
     {
         options.User.RequireUniqueEmail = true;
@@ -41,6 +53,7 @@ builder.Services.AddIdentity<Users, IdentityRole>(options =>
 
 var app = builder.Build();
 
+//Configure routing for the Identity API, maps to endpoints
 app.MapIdentityApi<Users>();
 
 // Configure the HTTP request pipeline.

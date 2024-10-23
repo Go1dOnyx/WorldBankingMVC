@@ -7,7 +7,7 @@ using WorldBankDB.DataAccess.EF.Models;
 
 namespace WorldBankDB.DataAccess.EF.Repositories.Contract
 {
-    internal interface IAddressRepository
+    public interface IAddressRepository
     {
         Task<Addresses> CreateAddressAsync(Addresses addr);
         Task<Addresses> UpdateAddressAsync(Addresses addr);
