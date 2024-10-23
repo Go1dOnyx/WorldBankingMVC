@@ -25,7 +25,7 @@ namespace WorldBankDB.DataAccess.EF.Context
         public virtual DbSet<Accounts> Accounts { get; set; }
         public virtual DbSet<Addresses> Addresses { get; set; }
         public virtual DbSet<Admins> Admins { get; set; }
-        public virtual DbSet<Users> Users { get; set; }
+        public virtual new DbSet<Users> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

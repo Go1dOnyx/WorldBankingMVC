@@ -52,6 +52,7 @@ namespace WorldBankDB.DataAccess.EF.Repositories
         public async Task<SignInResult> LoginUserAsync(string userEmail, string pass, bool isPersistent, bool lockoutOnFailure) 
         {
             var user = await _userManager.FindByEmailAsync(userEmail);
+
             if (user == null) 
             {
                 user = await _userManager.FindByNameAsync(userEmail);
@@ -71,7 +72,7 @@ namespace WorldBankDB.DataAccess.EF.Repositories
         //Regular Methods 
         public async Task<Users> UpdateUserAsync(Users user) 
         {
-            Users updateUser = await _context.Users.FindAsync(user.UserId);
+            Users? updateUser = await _context.Users.FindAsync(user.UserId);
 
             if (updateUser != null) 
             {
@@ -100,7 +101,7 @@ namespace WorldBankDB.DataAccess.EF.Repositories
         }
         public async Task<Users> GetUserByIdAsync(Guid userID) 
         {
-            Users getUser = await _context.Users.FindAsync(userID);
+            Users? getUser = await _context.Users.FindAsync(userID);
 
             await _context.DisposeAsync();
 
@@ -122,7 +123,7 @@ namespace WorldBankDB.DataAccess.EF.Repositories
         }
         public async Task<bool> DeleteUserAsync(Users user) 
         {
-            Users delUser = await _context.Users.FindAsync(user.UserId);
+            Users? delUser = await _context.Users.FindAsync(user.UserId);
 
             if (delUser != null) 
             {

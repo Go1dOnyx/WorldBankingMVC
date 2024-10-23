@@ -25,9 +25,19 @@ builder.Services.AddDbContext<WorldBankDBContext>(
     }
     );
 
-builder.Services.AddIdentity<Users, IdentityRole>()
+builder.Services.AddIdentity<Users, IdentityRole>(options =>
+    {
+        options.User.RequireUniqueEmail = true;
+        options.Password.RequireDigit = true;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireUppercase = true;
+        options.Password.RequireNonAlphanumeric = true;
+        options.Password.RequiredLength = 12;
+        options.SignIn.RequireConfirmedEmail = false;
+    })
     .AddEntityFrameworkStores<WorldBankDBContext>()
-    .AddDefaultTokenProviders();
+    .AddDefaultTokenProviders()
+    .AddDefaultUI();
 
 var app = builder.Build();
 
