@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddMvc();
+builder.Services.AddMvc().AddControllersAsServices();
 
 //Add services for authentication and authorization
 builder.Services.AddAuthorization();
@@ -21,6 +21,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+
+builder.Services.AddHttpContextAccessor();
 
 //Adds configuration from the appsettings.json file
 IConfiguration configuration = new ConfigurationBuilder()
@@ -69,6 +71,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

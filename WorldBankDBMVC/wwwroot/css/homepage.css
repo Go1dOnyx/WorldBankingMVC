@@ -12,6 +12,13 @@
         color: whitesmoke;
         border-radius: 2px;
     }
+.background-white {
+    background-color:white;
+}
+.form-container {
+    border: 0.5px solid #bbb;
+    width:50%;
+}
 .inputTxt {
     width: 60%;
     border: 0.5px solid grey;
@@ -19,3 +26,63 @@
     margin: 1rem;
     padding: 0.3rem;
 }
+.heading-title {
+    font: bolder;
+    font-size: 6rem;
+    font-weight: bold;
+}
+.sendBtn {
+    border-radius: 25px;
+    border: 1px solid red;
+    background-color: red;
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+}
+    .sendBtn:hover {
+        background-color: crimson;
+        border: 1px solid crimson;
+        color: whitesmoke;
+        transform: scale(1.050);
+        transition: transform 170ms ease-in-out;
+    }
+
+.carousel {
+    position: relative;
+    max-width: 80%; /* Set your desired width */
+    height: 80%; /* Set your desired height */
+    margin: auto;
+    overflow: hidden;
+}
+
+.carousel-body {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+    .carousel-body .carousel-img {
+        width: 100%; /* Make sure it covers the full width */
+        height: 100%; /* Make sure it covers the full height */
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+
+.indicators {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #bbb;
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.active {
+    background-color: red;
+}
+
