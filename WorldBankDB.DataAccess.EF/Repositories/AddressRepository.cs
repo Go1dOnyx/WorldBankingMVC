@@ -19,6 +19,7 @@ namespace WorldBankDB.DataAccess.EF.Repositories
         {
             _context = context;
         }
+        public async Task<List<Addresses>> GetAllAddrAsync() => await _context.Addresses.ToListAsync();
         public async Task<Addresses> CreateAddressAsync(Addresses addr) 
         {
             if (addr != null) 
@@ -41,7 +42,7 @@ namespace WorldBankDB.DataAccess.EF.Repositories
         }
         public async Task<Addresses> UpdateAddressAsync(Addresses addr) 
         {
-            Addresses updateAddr = await _context.Addresses.FindAsync(addr.AddressId);
+            var updateAddr = await _context.Addresses.FindAsync(addr.AddressId);
 
             if (updateAddr != null) 
             {
@@ -69,7 +70,7 @@ namespace WorldBankDB.DataAccess.EF.Repositories
         }
         public async Task<Addresses> GetAddrByIdAsync(Guid addrID) 
         {
-            Addresses getAddr = await _context.Addresses.FindAsync(addrID);
+            var getAddr = await _context.Addresses.FindAsync(addrID);
 
             await _context.DisposeAsync();
 
@@ -78,20 +79,9 @@ namespace WorldBankDB.DataAccess.EF.Repositories
             else 
                 throw new InvalidOperationException("Could not find address by ID.");
         }
-        public async Task<List<Addresses>> GetAllAddrAsync()
-        {
-            List<Addresses> addrList = await _context.Addresses.ToListAsync();
-
-            await _context.DisposeAsync();
-
-            if (addrList != null)
-                return addrList;
-            else
-                throw new InvalidOperationException("Could not retrieve the list of all addresses.");
-        }
         public async Task<bool> DeleteAddressAsync(Addresses addr) 
         {
-            Addresses delAddr = await _context.Addresses.FindAsync(addr.AddressId);
+            var delAddr = await _context.Addresses.FindAsync(addr.AddressId);
 
             if (delAddr != null) 
             {

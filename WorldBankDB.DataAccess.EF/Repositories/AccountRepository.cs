@@ -17,6 +17,7 @@ namespace WorldBankDB.DataAccess.EF.Repositories
         {
             _context = context;
         }
+        public async Task<List<Accounts>> GetAllAccountAsync() => await _context.Accounts.ToListAsync();
         public async Task<Accounts> CreateAccountAsync(Accounts acct) //verify if acct model valid data
         {
             if (acct != null) 
@@ -39,7 +40,7 @@ namespace WorldBankDB.DataAccess.EF.Repositories
         }
         public async Task<Accounts> UpdateAccountAsync(Accounts acct) 
         {
-            Accounts updateAcct = await _context.Accounts.FindAsync(acct.AccountId);
+            var updateAcct = await _context.Accounts.FindAsync(acct.AccountId);
 
             if (updateAcct != null) 
             {
@@ -66,27 +67,16 @@ namespace WorldBankDB.DataAccess.EF.Repositories
         }
         public async Task<Accounts> GetAcctByIdAsync(Guid acctID) 
         {
-            Accounts getAcct = await _context.Accounts.FindAsync(acctID);
+            var getAcct = await _context.Accounts.FindAsync(acctID);
 
             if (getAcct != null)
                 return getAcct;
             else
                 throw new InvalidOperationException($"Could not find account of {acctID}");
         }
-        public async Task<List<Accounts>> GetAllAccountAsync() 
-        {
-            List<Accounts> acctList = await _context.Accounts.ToListAsync();
-
-            await _context.DisposeAsync();
-
-            if (acctList != null)
-                return acctList;
-            else
-                throw new InvalidOperationException("Could not retrieve all list of accounts of users");
-        }
         public async Task<bool> DeleteAccountAsync(Accounts acct) 
         {
-            Accounts delAcct = await _context.Accounts.FindAsync(acct.AccountId);
+            var delAcct = await _context.Accounts.FindAsync(acct.AccountId);
 
             if (delAcct != null) 
             {

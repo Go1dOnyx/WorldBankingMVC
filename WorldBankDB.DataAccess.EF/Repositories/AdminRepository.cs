@@ -17,6 +17,7 @@ namespace WorldBankDB.DataAccess.EF.Repositories
         {
             _context = context;
         }
+        public async Task<List<Admins>> GetAllAdminsAsync() => await _context.Admins.ToListAsync();
         public async Task<Admins> CreateAdminAsync(Admins admin) 
         {
             if (admin != null) 
@@ -39,7 +40,7 @@ namespace WorldBankDB.DataAccess.EF.Repositories
         }
         public async Task<Admins> UpdateAdminAsync(Admins admin) 
         {
-            Admins updateAdmin = await _context.Admins.FindAsync(admin.AdminId);
+            var updateAdmin = await _context.Admins.FindAsync(admin.AdminId);
 
             if (updateAdmin != null)
             {
@@ -67,7 +68,7 @@ namespace WorldBankDB.DataAccess.EF.Repositories
         }
         public async Task<Admins> GetAdminByIdAsync(Guid adminID) 
         {
-            Admins getAdmin = await _context.Admins.FindAsync(adminID);
+            var getAdmin = await _context.Admins.FindAsync(adminID);
 
             await _context.DisposeAsync();
 
@@ -76,20 +77,9 @@ namespace WorldBankDB.DataAccess.EF.Repositories
             else
                 throw new InvalidOperationException("Could not retrieve admin.");
         }
-        public async Task<List<Admins>> GetAllAdminsAsync() 
-        {
-            List<Admins> adminList = await _context.Admins.ToListAsync();
-
-            await _context.DisposeAsync();
-
-            if (adminList != null)
-                return adminList;
-            else 
-                throw new InvalidOperationException("");
-        }
         public async Task<bool> DeleteAdminAsync(Admins admin)
         {
-            Admins delAdmin = await _context.Admins.FindAsync(admin.AdminId);
+            var delAdmin = await _context.Admins.FindAsync(admin.AdminId);
 
             if (delAdmin != null) 
             {

@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorldBankDBMVC", "WorldBank
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorldBankDB.DataAccess.EF", "WorldBankDB.DataAccess.EF\WorldBankDB.DataAccess.EF.csproj", "{A2718E9D-BED3-4336-996A-062FA5F065E2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldBankDB.DataAccess.Test", "WorldBankDB.DataAccess.Test\WorldBankDB.DataAccess.Test.csproj", "{2F08DCE3-B6E1-4479-9AF4-9D82BDA5C72A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{A2718E9D-BED3-4336-996A-062FA5F065E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2718E9D-BED3-4336-996A-062FA5F065E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2718E9D-BED3-4336-996A-062FA5F065E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F08DCE3-B6E1-4479-9AF4-9D82BDA5C72A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F08DCE3-B6E1-4479-9AF4-9D82BDA5C72A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F08DCE3-B6E1-4479-9AF4-9D82BDA5C72A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F08DCE3-B6E1-4479-9AF4-9D82BDA5C72A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
