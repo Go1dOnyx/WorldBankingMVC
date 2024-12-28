@@ -9,10 +9,10 @@ namespace WorldBankDB.DataAccess.EF.Repositories.Contract
 {
     public interface IAddressRepository
     {
+        Task<List<Addresses>> GetAllAddrAsync();
         Task<Addresses> CreateAddressAsync(Addresses addr);
         Task<Addresses> UpdateAddressAsync(Addresses addr);
         Task<Addresses> GetAddrByIdAsync(Guid addrID);
-        Task<List<Addresses>> GetAllAddrAsync();
         Task<bool> DeleteAddressAsync(Addresses addr);
     }
 }

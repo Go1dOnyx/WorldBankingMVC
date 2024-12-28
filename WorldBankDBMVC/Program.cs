@@ -1,9 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using WorldBankDB.DataAccess.EF.Context;
 using WorldBankDB.DataAccess.EF.Models;
 using WorldBankDB.DataAccess.EF.Repositories;
+using WorldBankDB.DataAccess.EF.Services;
 using WorldBankDB.DataAccess.EF.Repositories.Contract;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
+using WorldBankDB.DataAccess.EF.Services.Contract;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,11 +18,15 @@ builder.Services.AddMvc().AddControllersAsServices();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication().AddCookie();
 
-//DI Container Services
+//DI Container Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+
+//DI Container Services
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 builder.Services.AddHttpContextAccessor();
 
@@ -37,10 +43,10 @@ builder.Services.AddDbContext<WorldBankDBContext>(
     }
     );
 
-
 //Setup Identity system with rules
 builder.Services.AddIdentity<Users, IdentityRole>(options =>
     {
+        //User Credential Configuration
         options.User.RequireUniqueEmail = true;
         options.Password.RequireDigit = true;
         options.Password.RequireLowercase = true;
@@ -48,6 +54,10 @@ builder.Services.AddIdentity<Users, IdentityRole>(options =>
         options.Password.RequireNonAlphanumeric = true;
         options.Password.RequiredLength = 12;
         options.SignIn.RequireConfirmedEmail = false;
+        //Lockout Configuration
+        options.Lockout.MaxFailedAccessAttempts = 5;
+        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
+        options.Lockout.AllowedForNewUsers = true;
     })
     .AddEntityFrameworkStores<WorldBankDBContext>()
     .AddDefaultTokenProviders()

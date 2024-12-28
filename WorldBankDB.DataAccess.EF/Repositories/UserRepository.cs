@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using WorldBankDB.DataAccess.EF.Context;
 using WorldBankDB.DataAccess.EF.Models;
 using WorldBankDB.DataAccess.EF.Repositories.Contract;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
 
 namespace WorldBankDB.DataAccess.EF.Repositories
 {
@@ -28,28 +22,15 @@ namespace WorldBankDB.DataAccess.EF.Repositories
         //Methods using Identity
         public async Task<IdentityResult> CreateUserAsync(Users user)
         {
-            var result = await _userManager.CreateAsync(user);
-            try 
-            {
-                if (result.Succeeded)
-                {
-                    await _context.AddAsync(result);
-                    await _context.SaveChangesAsync();
-                    await _context.DisposeAsync();
-
-                    return IdentityResult.Success;
-                }
-
-                return IdentityResult.Failed(result.Errors.ToArray());
-            }
-            catch (Exception ex) 
-            {
-                return IdentityResult.Failed(new IdentityError { Description = $"An error occurred when creating user: {ex.Message}" });
-            }
-
+             return await _userManager.CreateAsync(user);
         }
+        public async Task<IdentityResult> DeleteUserAsync(Users user)
+        {
+            var delUser = await _userManager.FindByIdAsync(user.UserId.ToString());
 
-        public async Task<SignInResult> LoginUserAsync(string userEmail, string pass, bool isPersistent, bool lockoutOnFailure) 
+            return await _userManager.DeleteAsync(delUser!);
+        }
+        public async Task<SignInResult> LoginUserAsync(string userEmail, string pass) 
         {
             var user = await _userManager.FindByEmailAsync(userEmail);
 
@@ -59,91 +40,64 @@ namespace WorldBankDB.DataAccess.EF.Repositories
             }
             if (user != null) 
             {
-                return await _signInManager.PasswordSignInAsync(userEmail, pass, isPersistent: false, lockoutOnFailure: false);
+                return await _signInManager.PasswordSignInAsync(userEmail, pass, isPersistent: true, lockoutOnFailure: true);
             }
 
             return SignInResult.Failed;
         }
-        public async Task SignOutUserAsync() 
+        public async Task<IdentityResult> ChangePasswordAsync(string userEmail, string oldPassword, string newPassword)
         {
-            await _signInManager.SignOutAsync();
-        }
+            var getUser = await _context.Users.FirstOrDefaultAsync(e => e.UserName == userEmail || e.EmailAddr == userEmail && e.Password == oldPassword);
 
-        //Regular Methods 
-        public async Task<Users> UpdateUserAsync(Users user) 
+            if (getUser != null)
+            {
+                var result = await _userManager.ChangePasswordAsync(getUser, oldPassword, newPassword);
+
+                return IdentityResult.Success;
+            }
+
+            return IdentityResult.Failed();
+        }
+        public async Task<IdentityResult> UpdateUserAsync(Users user)
         {
-            Users? updateUser = await _context.Users.FindAsync(user.UserId);
+            var updateUser = await _userManager.FindByIdAsync(user.UserId.ToString());
 
             if (updateUser != null) 
             {
-                try
-                {
-                    updateUser.Username = user.Username;
-                    updateUser.EmailAddr = user.EmailAddr;
-                    updateUser.Password = user.Password;
-                    updateUser.FirstName = user.FirstName;
-                    updateUser.MiddleName = user.MiddleName;
-                    updateUser.LastName = user.LastName;
-                    updateUser.Status = user.Status;
+                updateUser.Username = user.Username;
+                updateUser.EmailAddr = user.EmailAddr;
+                updateUser.FirstName = user.FirstName;
+                updateUser.MiddleName = user.MiddleName;
+                updateUser.LastName = user.LastName;
+                updateUser.Status = user.Status;
 
-                    await _context.SaveChangesAsync();
-                    await _context.DisposeAsync();
-
-                    return updateUser;
-                }
-                catch (Exception ex)
-                {
-                    throw new InvalidOperationException($"Could not update user. Error: {ex.Message}");
-                }
+                return await _userManager.UpdateAsync(updateUser);
             }
 
-            throw new InvalidOperationException("Could not find user.");
+            return IdentityResult.Failed();
         }
+        public async Task SignOutUserAsync() =>  await _signInManager.SignOutAsync();
+
+        //Regular Methods 
         public async Task<Users> GetUserByIdAsync(Guid userID) 
         {
-            Users? getUser = await _context.Users.FindAsync(userID);
-
-            await _context.DisposeAsync();
+            var getUser = await _userManager.FindByIdAsync(userID.ToString());
 
             if (getUser != null)
                 return getUser;
-            else
-                throw new InvalidOperationException("Could not retrieve user.");
+
+            throw new InvalidOperationException("Could not retrieve user.");
         }
-        public async Task<List<Users>> GetAllUsersAsync() 
+        public async Task<Users> GetUserByUserEmailAsync(string userEmail)
         {
-            List<Users> userList = await _context.Users.ToListAsync();
+            var getUser = await _context.Users.FirstOrDefaultAsync(e => e.Username == userEmail || e.EmailAddr == userEmail);
 
-            await _context.DisposeAsync();
+            if (getUser != null)
+                return getUser;
 
-            if (userList != null)
-                return userList;
-            else
-                throw new InvalidOperationException("Could not retrieve user list.");
+            throw new InvalidOperationException("Could not retrieve user.");
         }
-        public async Task<bool> DeleteUserAsync(Users user) 
-        {
-            Users? delUser = await _context.Users.FindAsync(user.UserId);
-
-            if (delUser != null) 
-            {
-                try
-                {
-                    _context.Remove(delUser);
-
-                    await _context.SaveChangesAsync();
-                    await _context.DisposeAsync();
-
-                    return true;
-                }
-                catch (Exception ex) 
-                {
-                    throw new InvalidOperationException($"Could not delete user. Error: {ex.Message}");
-                }
-            }
-
-            throw new InvalidOperationException("Could not find user.");
-        }
+        public async Task<List<Users>> GetAllUsersAsync() => await _userManager.Users.ToListAsync();
     }
 }
  

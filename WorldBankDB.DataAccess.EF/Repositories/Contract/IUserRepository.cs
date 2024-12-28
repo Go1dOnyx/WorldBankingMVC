@@ -1,9 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WorldBankDB.DataAccess.EF.Models;
 
 namespace WorldBankDB.DataAccess.EF.Repositories.Contract
@@ -12,13 +7,18 @@ namespace WorldBankDB.DataAccess.EF.Repositories.Contract
     {
         //Identity use methods
         Task<IdentityResult> CreateUserAsync(Users user);
-        Task<SignInResult> LoginUserAsync(string userEmail, string pass, bool isPersistent, bool lockoutOnFailure);
+        Task<IdentityResult> DeleteUserAsync(Users user);
+        Task<SignInResult> LoginUserAsync(string userEmail, string pass);
+        Task<IdentityResult> ChangePasswordAsync(string userEmail, string oldPassword, string newPassword);
+        Task<IdentityResult> UpdateUserAsync(Users user);
         Task SignOutUserAsync();
 
         //Regular methods
-        Task<Users> UpdateUserAsync(Users user);
+        Task<Users> GetUserByUserEmailAsync(string userEmail);
         Task<Users> GetUserByIdAsync(Guid userID);
         Task<List<Users>> GetAllUsersAsync();
-        Task<bool> DeleteUserAsync(Users user);
+
+        //Add Methods to handle tokens, cookies, password hashes, email verification
+        //etc.
     }
 }

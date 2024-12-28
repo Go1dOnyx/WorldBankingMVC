@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WorldBankDB.DataAccess.EF.Repositories.Contract;
+﻿using WorldBankDB.DataAccess.EF.Repositories.Contract;
 using WorldBankDB.DataAccess.EF.Models;
 using WorldBankDB.DataAccess.EF.Context;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel;
 
 
 namespace WorldBankDB.DataAccess.EF.Repositories
@@ -22,27 +16,16 @@ namespace WorldBankDB.DataAccess.EF.Repositories
         public async Task<List<Addresses>> GetAllAddrAsync() => await _context.Addresses.ToListAsync();
         public async Task<Addresses> CreateAddressAsync(Addresses addr) 
         {
-            if (addr != null) 
-            {
-                try 
-                {
-                    await _context.AddAsync(addr);
-                    await _context.SaveChangesAsync();
-                    await _context.SaveChangesAsync();
+            await _context.AddAsync(addr);
+            await _context.SaveChangesAsync();
 
-                    return addr;
-                }
-                catch (Exception ex) 
-                {
-                    throw new InvalidOperationException($"Addresses could not be created. Error: {ex.Message}");
-                }
-            }
-
-            throw new InvalidOperationException("Invalid model data or empty.");
+            return addr;
         }
         public async Task<Addresses> UpdateAddressAsync(Addresses addr) 
         {
             var updateAddr = await _context.Addresses.FindAsync(addr.AddressId);
+
+            if (updateAddr == null) { throw new InvalidOperationException("Could not find account."); }
 
             if (updateAddr != null) 
             {

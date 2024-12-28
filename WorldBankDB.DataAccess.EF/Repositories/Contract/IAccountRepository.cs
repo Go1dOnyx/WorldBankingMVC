@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WorldBankDB.DataAccess.EF.Models;
+﻿using WorldBankDB.DataAccess.EF.Models;
 
 namespace WorldBankDB.DataAccess.EF.Repositories.Contract
 {
     public interface IAccountRepository
     {
+        Task<List<Accounts>> GetAllAccountsAsync();
+        Task<Accounts?> GetAcctByIdAsync(Guid acctID);
+        Task<Accounts?> GetAcctByNumAsync(int acctNum);
         Task<Accounts> CreateAccountAsync(Accounts acct);
         Task<Accounts> UpdateAccountAsync(Accounts acct);
-        Task<Accounts> GetAcctByIdAsync(Guid acctID);
-        Task<List<Accounts>> GetAllAccountAsync();
+        Task<List<Accounts>> GetListByUserIdAsync(Guid userID);
         Task<bool> DeleteAccountAsync(Accounts acct);
     }
 }

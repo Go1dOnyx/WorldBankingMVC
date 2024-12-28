@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WorldBankDB.DataAccess.EF.Repositories.Contract;
+﻿using WorldBankDB.DataAccess.EF.Repositories.Contract;
 using WorldBankDB.DataAccess.EF.Models;
 using WorldBankDB.DataAccess.EF.Context;
 using Microsoft.EntityFrameworkCore;
@@ -17,86 +12,49 @@ namespace WorldBankDB.DataAccess.EF.Repositories
         {
             _context = context;
         }
-        public async Task<List<Accounts>> GetAllAccountAsync() => await _context.Accounts.ToListAsync();
+        public async Task<List<Accounts>> GetAllAccountsAsync() => await _context.Accounts.ToListAsync();
+        public async Task<Accounts?> GetAcctByIdAsync(Guid acctID) => await _context.Accounts.FindAsync(acctID);
+        public async Task<Accounts?> GetAcctByNumAsync(int acctNum) => await _context.Accounts.FirstOrDefaultAsync(e => e.AccountNum == acctNum);
+        public async Task<List<Accounts>> GetListByUserIdAsync(Guid userID) => await _context.Accounts.Where(e => e.UserId == userID).ToListAsync();
         public async Task<Accounts> CreateAccountAsync(Accounts acct) //verify if acct model valid data
         {
-            if (acct != null) 
-            {
-                try
-                {
-                    await _context.AddAsync(acct);
-                    await _context.SaveChangesAsync();
-                    await _context.DisposeAsync();
+            await _context.AddAsync(acct);
+            await _context.SaveChangesAsync();
 
-                    return acct;
-                }
-                catch (Exception ex)
-                {
-                    throw new InvalidOperationException($"Account could not be created. Error: {ex.Message}");
-                }
-            }
-
-            throw new InvalidOperationException("Invalid model data or empty.");
+            return acct;
         }
         public async Task<Accounts> UpdateAccountAsync(Accounts acct) 
         {
             var updateAcct = await _context.Accounts.FindAsync(acct.AccountId);
 
-            if (updateAcct != null) 
+            if (updateAcct == null) { throw new InvalidOperationException("Could not find account."); }
+
+            updateAcct.AccountType = acct.AccountType;
+            updateAcct.AccountNum = acct.AccountNum;
+            updateAcct.RoutingNum = acct.RoutingNum;
+            updateAcct.Amount = acct.Amount;
+            updateAcct.IsLocked = acct.IsLocked;
+
+            try
             {
-                try
-                {
-                    updateAcct.AccountType = acct.AccountType;
-                    updateAcct.AccountNum = acct.AccountNum;
-                    updateAcct.RoutingNum = acct.RoutingNum;
-                    updateAcct.Amount = acct.Amount;
-                    updateAcct.IsLocked = acct.IsLocked;
-
-                    await _context.SaveChangesAsync();
-                    await _context.DisposeAsync();
-
-                    return updateAcct;
-                }
-                catch (Exception ex) 
-                {
-                    throw new InvalidOperationException($"Could not make change for account of {acct.AccountNum}. Error: {ex.Message}");
-                }
+                await _context.SaveChangesAsync();
+                return updateAcct;
             }
-
-            throw new InvalidOperationException($"Account of {acct.AccountNum} was not found.");
-        }
-        public async Task<Accounts> GetAcctByIdAsync(Guid acctID) 
-        {
-            var getAcct = await _context.Accounts.FindAsync(acctID);
-
-            if (getAcct != null)
-                return getAcct;
-            else
-                throw new InvalidOperationException($"Could not find account of {acctID}");
+            catch (Exception ex) { throw new InvalidOperationException($"Could not update account. Error: {ex.Message} "); }
         }
         public async Task<bool> DeleteAccountAsync(Accounts acct) 
         {
             var delAcct = await _context.Accounts.FindAsync(acct.AccountId);
 
-            if (delAcct != null) 
+            if(delAcct == null) { throw new InvalidOperationException("Account not found."); }
+
+            try
             {
-                try
-                {
-                    _context.Remove(delAcct);
-
-                    await _context.SaveChangesAsync();
-
-                    await _context.DisposeAsync();
-
-                    return true;
-                }
-                catch (Exception ex) 
-                {
-                    throw new InvalidOperationException($"Account of {acct.AccountNum} could not be deleted. Error: {ex.Message}");
-                }
+                _context.Remove(delAcct);
+                await _context.SaveChangesAsync();
+                return true;
             }
-
-            throw new InvalidOperationException("Could not find account.");
+            catch(Exception ex) { throw new InvalidOperationException($"Account could not be deleted. {ex.Message}"); }   
         }
     }
 }
