@@ -14,6 +14,9 @@ namespace WorldBankDB.DataAccess.EF.Repositories
             _context = context;
         }
         public async Task<List<Addresses>> GetAllAddrAsync() => await _context.Addresses.ToListAsync();
+        public async Task<Addresses?> GetAddrByIdAsync(int addrID) => await _context.Addresses.FindAsync(addrID);
+        public async Task<Addresses?> GetAddrByStreetAsync(string street) => await _context.Addresses.FirstOrDefaultAsync(x => x.Street == street);
+        public async Task<List<Addresses>> GetListAddrByUserIdAsync(Guid userID) => await _context.Addresses.Where(e => e.UserId == userID).ToListAsync();
         public async Task<Addresses> CreateAddressAsync(Addresses addr) 
         {
             await _context.AddAsync(addr);
@@ -25,66 +28,34 @@ namespace WorldBankDB.DataAccess.EF.Repositories
         {
             var updateAddr = await _context.Addresses.FindAsync(addr.AddressId);
 
-            if (updateAddr == null) { throw new InvalidOperationException("Could not find account."); }
+            if (updateAddr == null) { throw new InvalidOperationException("Could not find address."); }
 
-            if (updateAddr != null) 
-            {
-                try 
+            updateAddr.Street = addr.Street;
+            updateAddr.Apt = addr.Apt;
+            updateAddr.City = addr.City;
+            updateAddr.Country = addr.Country;
+            updateAddr.ZipCode = addr.ZipCode;
+
+            try 
                 {
-                    updateAddr.UserId = updateAddr.UserId;
-                    updateAddr.Street = addr.Street;
-                    updateAddr.Apt = addr.Apt;
-                    updateAddr.City = addr.City;
-                    updateAddr.Country = addr.Country;
-                    updateAddr.ZipCode = addr.ZipCode;
-
                     await _context.SaveChangesAsync();
-                    await _context.DisposeAsync();
-
                     return updateAddr;
                 }
-                catch (Exception ex) 
-                {
-                    throw new InvalidOperationException($"Address could not be updated. Error: {ex.Message}");
-                }
-            }
-
-            throw new InvalidOperationException("Invalid model data or empty.");
-        }
-        public async Task<Addresses> GetAddrByIdAsync(Guid addrID) 
-        {
-            var getAddr = await _context.Addresses.FindAsync(addrID);
-
-            await _context.DisposeAsync();
-
-            if (getAddr != null)
-                return getAddr;
-            else 
-                throw new InvalidOperationException("Could not find address by ID.");
+                catch (Exception ex) { throw new InvalidOperationException($"Address could not be updated. Error: {ex.Message}"); }
         }
         public async Task<bool> DeleteAddressAsync(Addresses addr) 
         {
             var delAddr = await _context.Addresses.FindAsync(addr.AddressId);
 
-            if (delAddr != null) 
+            if (delAddr == null) { throw new InvalidOperationException("Could not find address."); }
+
+            try
             {
-                try
-                {
-                    _context.Remove(delAddr);
-
-                    await _context.SaveChangesAsync();
-
-                    await _context.DisposeAsync();
-
-                    return true;
-                }
-                catch (Exception ex) 
-                {
-                    throw new InvalidOperationException($"Could not delete account. Error: {ex.Message}");
-                }
+                _context.Remove(delAddr);
+                await _context.SaveChangesAsync();
+                return true;
             }
-
-            throw new InvalidOperationException("Could not find account.");
+            catch (Exception ex) { throw new InvalidOperationException($"Could not delete address. {ex.Message}"); }
         }
     }
 }
