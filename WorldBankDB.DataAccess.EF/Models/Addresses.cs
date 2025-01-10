@@ -10,14 +10,17 @@ namespace WorldBankDB.DataAccess.EF.Models
     public partial class Addresses
     {
         public int AddressId { get; set; }
-        public Guid UserId { get; set; }
+        public Guid UserId { get; set; } //Foreign Key
         public string? Street { get; set; }
         public string? Apt { get; set; }
         public string? City { get; set; }
         public string? Country { get; set; }
         public int ZipCode { get; set; }
 
-        public Addresses(int addrID, Guid userID, string street, string apt, string city, string country, int zip) 
+        //User
+        public Users? User { get; set; } 
+
+        public Addresses(int addrID, Guid userID, string street, string apt, string city, string country, int zip, Users user) 
         {
             AddressId = addrID;
             UserId = userID;
@@ -26,6 +29,7 @@ namespace WorldBankDB.DataAccess.EF.Models
             City = city;
             Country = country;
             ZipCode = zip;
+            User = user;
         }
         public Addresses() { }
     }

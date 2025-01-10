@@ -20,13 +20,13 @@ builder.Services.AddAuthentication().AddCookie();
 
 //DI Container Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
 //DI Container Services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IAddressService, AddressService>();
 
 builder.Services.AddHttpContextAccessor();
 

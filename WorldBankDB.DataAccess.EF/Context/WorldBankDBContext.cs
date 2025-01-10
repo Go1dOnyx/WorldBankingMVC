@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using WorldBankDB.DataAccess.EF.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Linq;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
 // If you have enabled NRTs for your project, then un-comment the following line:
@@ -24,7 +23,6 @@ namespace WorldBankDB.DataAccess.EF.Context
 
         public virtual DbSet<Accounts> Accounts { get; set; }
         public virtual DbSet<Addresses> Addresses { get; set; }
-        public virtual DbSet<Admins> Admins { get; set; }
         public virtual new DbSet<Users> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -39,6 +37,13 @@ namespace WorldBankDB.DataAccess.EF.Context
         {
             modelBuilder.Entity<Accounts>(entity =>
             {
+                entity.ToTable("Accounts", tableBuilder => 
+                {
+                    tableBuilder.HasCheckConstraint(
+                        "CK_Amount_NotBelowZero",
+                       sql: "Amount >= 0");
+                });
+
                 entity.HasKey(e => e.AccountId);
 
                 entity.Property(e => e.AccountId)
@@ -54,6 +59,8 @@ namespace WorldBankDB.DataAccess.EF.Context
                 entity.Property(e => e.RoutingNum).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.HasOne(e => e.UserId)
             });
 
             modelBuilder.Entity<Addresses>(entity =>
@@ -81,40 +88,46 @@ namespace WorldBankDB.DataAccess.EF.Context
                 entity.Property(e => e.UserId).HasColumnName("UserID");
             });
 
-            modelBuilder.Entity<Admins>(entity =>
+            //Might need to update properties. 
+            modelBuilder.Entity<Cards>(entity => 
             {
-                entity.HasKey(e => e.AdminId);
+                entity.HasKey(e => e.CardId);
 
-                entity.Property(e => e.AdminId)
-                    .HasColumnName("AdminID")
+                entity.Property(e => e.CardId)
+                    .HasColumnName("CardID")
                     .ValueGeneratedNever();
 
-                entity.Property(e => e.AdminEmail)
+                entity.Property(e => e.CardName)
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.AdminPassword)
-                    .IsRequired()
-                    .HasMaxLength(255);
+                entity.Property(e => e.CardNumber).IsRequired();
 
-                entity.Property(e => e.AdminUser)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.ExpirationDate).IsRequired();
 
-                entity.Property(e => e.FirstName)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.SecurityCode).IsRequired();
 
-                entity.Property(e => e.LastName)
+                entity.Property(e => e.CardAmount)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasColumnType("decimal(18,2)");
 
-                entity.Property(e => e.MiddleName)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property<bool>(e => e.IsLocked).IsRequired();
+
+                entity.Property(e => e.CreatedDate).IsRequired();
+
+                entity.Property<bool>(e => e.IsCredit).IsRequired();
+
+                entity.Property(e => e.AccountId).HasColumnName("AccountID");
+
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                //Foreign Key One-to-One
+                entity.HasOne(e => e.Accounts)
+                    .WithOne(e => e.Cards)
+                    .HasForeignKey<Cards>(e => e.AccountId);
             });
 
-            modelBuilder.Entity<Users>(entity =>
+            modelBuilder.Entity<Users>(entity =>   
             {
                 entity.HasKey(e => e.UserId);
 
@@ -134,13 +147,26 @@ namespace WorldBankDB.DataAccess.EF.Context
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.MiddleName)
-                    .IsRequired()
+                entity.Property(e => e.MiddleName) //updated, it to not be required
                     .HasMaxLength(50);
 
                 entity.Property(e => e.Password)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Property(e => e.PhoneNumber) //Added
+                    .IsRequired()
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Role) //Added
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasDefaultValue("user");
+
+                entity.Property(e => e.Status) //Added
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasDefaultValue("active");
 
                 entity.Property(e => e.Username)
                     .IsRequired()
