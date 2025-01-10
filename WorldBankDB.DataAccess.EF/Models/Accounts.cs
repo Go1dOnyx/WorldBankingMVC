@@ -18,8 +18,8 @@ namespace WorldBankDB.DataAccess.EF.Models
         public decimal Amount { get; set; }
         public bool IsLocked { get; set; }
 
-        public Cards? Cards { get; set; }
-        public Users? Users { get; set; }
+        public Cards? Card { get; set; }
+        public Users? User { get; set; }
 
         public Accounts(Guid accountID, Guid userID, string acctType, int acctNum, int routeNum, decimal amount, bool isLocked, Cards card, Users user) 
         {
@@ -30,8 +30,8 @@ namespace WorldBankDB.DataAccess.EF.Models
             RoutingNum = routeNum;
             Amount = amount;
             IsLocked = isLocked;
-            Cards = card;
-            Users = user;
+            Card = card;
+            User = user;
         }
         public Accounts() { }
     }

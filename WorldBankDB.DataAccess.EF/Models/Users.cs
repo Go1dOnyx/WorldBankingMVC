@@ -20,8 +20,9 @@ namespace WorldBankDB.DataAccess.EF.Models
 
         public ICollection<Accounts>? Accounts { get; set; }
         public ICollection<Addresses>? Addresses { get; set; }
+        public ICollection<Cards>? Cards { get; set; }
 
-        public Users(Guid userID, string user, string email,string pass, string first, string middle, string last, string role, string status, ICollection<Accounts> accts, ICollection<Addresses> addrs) 
+        public Users(Guid userID, string user, string email,string pass, string first, string middle, string last, string role, string status, ICollection<Accounts> accts, ICollection<Addresses> addrs, ICollection<Cards> cards) 
         {
             UserId = userID;
             Username = user;
@@ -34,6 +35,7 @@ namespace WorldBankDB.DataAccess.EF.Models
             Status = status;
             Accounts = accts;
             Addresses = addrs;
+            Cards = cards;
         }
         public Users() { }
     }

@@ -60,7 +60,15 @@ namespace WorldBankDB.DataAccess.EF.Context
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
-                entity.HasOne(e => e.UserId)
+                entity.HasOne(e => e.User)
+                    .WithMany(u => u.Accounts)
+                    .HasForeignKey(e => e.UserId)
+                    .IsRequired();
+
+                entity.HasOne(e => e.Card)
+                    .WithOne(e => e.Account)
+                    .HasForeignKey<Cards>(e => e.AccountId)
+                    .IsRequired();
             });
 
             modelBuilder.Entity<Addresses>(entity =>
@@ -86,6 +94,12 @@ namespace WorldBankDB.DataAccess.EF.Context
                     .HasMaxLength(255);
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.HasOne(e => e.User)
+                    .WithMany(e => e.Addresses)
+                    .HasForeignKey(e => e.UserId)
+                    .IsRequired();
+
             });
 
             //Might need to update properties. 
@@ -122,9 +136,15 @@ namespace WorldBankDB.DataAccess.EF.Context
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
                 //Foreign Key One-to-One
-                entity.HasOne(e => e.Accounts)
-                    .WithOne(e => e.Cards)
-                    .HasForeignKey<Cards>(e => e.AccountId);
+                entity.HasOne(e => e.Account)
+                    .WithOne(e => e.Card)
+                    .HasForeignKey<Cards>(e => e.AccountId)
+                    .IsRequired();
+
+                entity.HasOne(e => e.User)
+                    .WithMany(e => e.Cards)
+                    .HasForeignKey(e => e.UserId)
+                    .IsRequired();
             });
 
             modelBuilder.Entity<Users>(entity =>   
