@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace WorldBankDB.DataAccess.EF.Models
 {
-    public partial class Addresses
+    public class Addresses
     {
         public int AddressId { get; set; }
         public Guid UserId { get; set; } //Foreign Key

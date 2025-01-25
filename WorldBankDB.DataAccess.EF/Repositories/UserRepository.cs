@@ -26,7 +26,7 @@ namespace WorldBankDB.DataAccess.EF.Repositories
         }
         public async Task<IdentityResult> DeleteUserAsync(Users user)
         {
-            var delUser = await _userManager.FindByIdAsync(user.UserId.ToString());
+            var delUser = await _userManager.FindByIdAsync(user.Id.ToString());
 
             return await _userManager.DeleteAsync(delUser!);
         }
@@ -45,13 +45,13 @@ namespace WorldBankDB.DataAccess.EF.Repositories
 
             return SignInResult.Failed;
         }
-        public async Task<IdentityResult> ChangePasswordAsync(string userEmail, string oldPassword, string newPassword)
+        public async Task<IdentityResult> ChangePasswordAsync(string userEmail, string oldPasswordHash, string newPassword) //Implement Hash
         {
-            var getUser = await _context.Users.FirstOrDefaultAsync(e => e.UserName == userEmail || e.EmailAddr == userEmail && e.Password == oldPassword);
+            var getUser = await _context.Users.FirstOrDefaultAsync(e => e.UserName == userEmail || e.Email == userEmail && e.PasswordHash == oldPasswordHash);
 
             if (getUser != null)
             {
-                var result = await _userManager.ChangePasswordAsync(getUser, oldPassword, newPassword);
+                var result = await _userManager.ChangePasswordAsync(getUser, oldPasswordHash, newPassword);
 
                 return IdentityResult.Success;
             }
@@ -60,12 +60,10 @@ namespace WorldBankDB.DataAccess.EF.Repositories
         }
         public async Task<IdentityResult> UpdateUserAsync(Users user)
         {
-            var updateUser = await _userManager.FindByIdAsync(user.UserId.ToString());
+            var updateUser = await _userManager.FindByIdAsync(user.Id.ToString());
 
             if (updateUser != null) 
-            {
-                updateUser.Username = user.Username;
-                updateUser.EmailAddr = user.EmailAddr;
+            {;
                 updateUser.FirstName = user.FirstName;
                 updateUser.MiddleName = user.MiddleName;
                 updateUser.LastName = user.LastName;
@@ -90,7 +88,7 @@ namespace WorldBankDB.DataAccess.EF.Repositories
         }
         public async Task<Users> GetUserByUserEmailAsync(string userEmail)
         {
-            var getUser = await _context.Users.FirstOrDefaultAsync(e => e.Username == userEmail || e.EmailAddr == userEmail);
+            var getUser = await _context.Users.FirstOrDefaultAsync(e => e.UserName == userEmail || e.Email == userEmail);
 
             if (getUser != null)
                 return getUser;

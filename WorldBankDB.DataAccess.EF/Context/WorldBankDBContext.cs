@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace WorldBankDB.DataAccess.EF.Context
 {
-    public partial class WorldBankDBContext : IdentityDbContext<IdentityUser>
+    public partial class WorldBankDBContext : IdentityDbContext<Users, IdentityRole<Guid>, Guid>
     {
         public WorldBankDBContext()
         {
@@ -23,7 +23,7 @@ namespace WorldBankDB.DataAccess.EF.Context
 
         public virtual DbSet<Accounts> Accounts { get; set; }
         public virtual DbSet<Addresses> Addresses { get; set; }
-        public virtual new DbSet<Users> Users { get; set; }
+        public virtual DbSet<Cards> Cards { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -35,6 +35,80 @@ namespace WorldBankDB.DataAccess.EF.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<IdentityUserLogin<Guid>>()
+                .HasKey(e => new { e.LoginProvider, e.ProviderKey });
+
+            modelBuilder.Entity<IdentityUserClaim<Guid>>()
+                .HasKey(e => e.Id);
+
+            modelBuilder.Entity<IdentityUserRole<Guid>>()
+                .HasKey(e => new { e.UserId, e.RoleId });
+
+            modelBuilder.Entity<IdentityUserToken<Guid>>()
+                .HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
+
+            /*
+             // Define foreign key relationship between IdentityUserClaim and ApplicationUser
+        builder.Entity<IdentityUserClaim<string>>()
+            .HasOne<ApplicationUser>()
+            .WithMany()
+            .HasForeignKey(uc => uc.UserId)
+            .IsRequired();
+
+        // Define foreign key relationship between IdentityUserToken and ApplicationUser
+        builder.Entity<IdentityUserToken<string>>()
+            .HasOne<ApplicationUser>()
+            .WithMany()
+            .HasForeignKey(ut => ut.UserId)
+            .IsRequired();
+             */
+
+            modelBuilder.Entity<Users>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("UserID")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.FirstName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.LastName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.MiddleName) //updated, it to not be required
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Phone) //Added
+                    .IsRequired()
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Role) //Added
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasDefaultValue("user");
+
+                entity.Property(e => e.Status) //Added
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasDefaultValue("active");
+
+                entity.HasMany(e => e.Accounts)
+                    .WithOne()
+                    .HasForeignKey(a => a.UserId);
+
+                entity.HasMany(e => e.Addresses)
+                    .WithOne()
+                    .HasForeignKey(a => a.UserId);
+
+                entity.HasMany(e => e.Cards)
+                    .WithOne()
+                    .HasForeignKey(a => a.UserId);
+            });
+
             modelBuilder.Entity<Accounts>(entity =>
             {
                 entity.ToTable("Accounts", tableBuilder => 
@@ -48,7 +122,7 @@ namespace WorldBankDB.DataAccess.EF.Context
 
                 entity.Property(e => e.AccountId)
                     .HasColumnName("AccountID")
-                    .ValueGeneratedNever();
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.AccountType)
                     .IsRequired()
@@ -75,7 +149,9 @@ namespace WorldBankDB.DataAccess.EF.Context
             {
                 entity.HasKey(e => e.AddressId);
 
-                entity.Property(e => e.AddressId).HasColumnName("AddressID");
+                entity.Property(e => e.AddressId)
+                    .HasColumnName("AddressID")
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Apt)
                     .IsRequired()
@@ -109,7 +185,7 @@ namespace WorldBankDB.DataAccess.EF.Context
 
                 entity.Property(e => e.CardId)
                     .HasColumnName("CardID")
-                    .ValueGeneratedNever();
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.CardName)
                     .IsRequired()
@@ -145,52 +221,6 @@ namespace WorldBankDB.DataAccess.EF.Context
                     .WithMany(e => e.Cards)
                     .HasForeignKey(e => e.UserId)
                     .IsRequired();
-            });
-
-            modelBuilder.Entity<Users>(entity =>   
-            {
-                entity.HasKey(e => e.UserId);
-
-                entity.Property(e => e.UserId)
-                    .HasColumnName("UserID")
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.EmailAddr)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.FirstName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.LastName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.MiddleName) //updated, it to not be required
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.PhoneNumber) //Added
-                    .IsRequired()
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.Role) //Added
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .HasDefaultValue("user");
-
-                entity.Property(e => e.Status) //Added
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .HasDefaultValue("active");
-
-                entity.Property(e => e.Username)
-                    .IsRequired()
-                    .HasMaxLength(50);
             });
 
             OnModelCreatingPartial(modelBuilder);
