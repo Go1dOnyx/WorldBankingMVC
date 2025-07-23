@@ -11,7 +11,7 @@ namespace WorldBankDB.DataAccess.EF.Models
     public class Accounts
     {
         public Guid AccountId { get; set; }
-        public Guid UserId { get; set; } //ForeignKey
+        public Guid UserId { get; set; }
         public string? AccountType { get; set; }
         public int AccountNum { get; set; }
         public int RoutingNum { get; set; }

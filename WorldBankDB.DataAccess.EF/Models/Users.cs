@@ -20,6 +20,7 @@ namespace WorldBankDB.DataAccess.EF.Models
         public string? Role {  get; set; }
         public string? Status { get; set; } //Frozen, suspended, blocked
 
+        //Navigation Properties
         public ICollection<Accounts>? Accounts { get; set; }
         public ICollection<Addresses>? Addresses { get; set; }
         public ICollection<Cards>? Cards { get; set; }
