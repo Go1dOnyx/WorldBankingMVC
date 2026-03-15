@@ -1,0 +1,42 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Xunit;
+using Moq;
+//Figure why it cannot add to this
+using WorldBankDB.DataAccess.EF.Models;
+
+namespace WorldBankDB.DataAccess.Test
+{
+    public class BankingServiceTests
+    {
+        [Fact]
+        public async Task Deposit_ShouldIncreaseBalance()
+        {
+            var account = new BankAccounts
+            {
+                BankAccountId = Guid.NewGuid(),
+                AccountBalance = 100.50,
+                Transactions = new List<Transaction>();
+            };
+
+        var mockRepo = new Mock<IBankAccountRepository>();
+        mockRepo.Setup(e => e.GetByIDAsync(account.BankAccountId))
+                .ReturnsAsync(account);
+
+        var options = new DbContextOptionsBuilder<WorldBankDBContext>()
+            .UseInMemoryDatabase("TestDB")
+            .Options;
+
+        var context = new WorldBankDBContext(options);
+
+        var service = new AccountService(mockRepo.Object, context);
+
+        await service.DepositAsync(account.BankAccountId, 500);
+
+        Assert.Equal(150, account.AccountBalance);
+        }
+    }
+}

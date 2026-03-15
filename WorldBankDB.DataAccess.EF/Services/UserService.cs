@@ -1,5 +1,4 @@
 ﻿using WorldBankDB.DataAccess.EF.Models;
-using WorldBankDB.DataAccess.EF.Repositories;
 using WorldBankDB.DataAccess.EF.Services.Contract;
 using WorldBankDB.DataAccess.EF.Repositories.Contract;
 using Microsoft.AspNetCore.Identity;
@@ -9,74 +8,99 @@ namespace WorldBankDB.DataAccess.EF.Services
     public class UserService: IUserService
     {
         private readonly IUserRepository _userRepository;
-        public UserService(IUserRepository userRepository)
+        private readonly UserManager<Users> _userManager;
+        private readonly SignInManager<Users> _signInManager;
+        public UserService(IUserRepository userRepository, UserManager<Users> userManager, SignInManager<Users> signInManager)
         {
             _userRepository = userRepository;
+            _userManager = userManager;
+            _signInManager = signInManager;
+        }
+        public async Task<SignInResult> LoginAsync(string email, string password, bool rememberMe)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+                return SignInResult.Failed;
+            if(user.Status != UserStatus.Active) 
+                return SignInResult.LockedOut;
+
+            return await _signInManager.PasswordSignInAsync
+                (
+                    user,
+                    password,
+                    rememberMe, //or isPersistent: true
+                    lockoutOnFailure: true
+                );
         }
         public async Task<IdentityResult> RegisterAsync(Users user) 
         {
-            if (user != null) 
+            var newUser = new Users 
             {
-                await _userRepository.CreateUserAsync(user);
+                Email = user.Email,
+                UserName = user.Email,
+                FirstName = user.FirstName,
+                MiddleName = user.LastName,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber,
+                CreatedAt = DateTime.UtcNow,
+            };
 
-                return IdentityResult.Success;
-            }
+            var result = await _userManager.CreateAsync(newUser, user.PasswordHash!);
 
-            return IdentityResult.Failed();
+            if (result.Succeeded) 
+                await _userManager.AddToRoleAsync(user, "User");
+
+            return result;
         }
         public async Task<IdentityResult> DeleteAsync(Users user) 
         {
-            if (user != null) 
-                return await _userRepository.DeleteUserAsync(user);
+            //Want to use _userManager, to properly delete roles, claims,
+            //and maintain consistency than doing it manually
+            //The same for update
+            var delUser = await _userManager.FindByIdAsync(user.Id.ToString());
 
-            return IdentityResult.Failed();
+            if (delUser == null)
+                return IdentityResult.Failed();
+
+            return await _userManager.DeleteAsync(delUser);
         }
-        public async Task<SignInResult> LoginAsync(string userEmail, string password) 
+        public async Task<IdentityResult> UpdateAsync(Users user)
         {
-            if (userEmail != string.Empty && password != string.Empty) 
-                return await _userRepository.LoginUserAsync(userEmail, password);
+            var updatedUser = await _userManager.FindByIdAsync(user.Id.ToString());
 
-            return SignInResult.Failed;
+            if (updatedUser == null)
+                return IdentityResult.Failed();
+
+            updatedUser.Email = user.Email;
+            updatedUser.FirstName = user.FirstName;
+            updatedUser.MiddleName = user.MiddleName;
+            updatedUser.LastName = user.LastName;
+            updatedUser.PhoneNumber = user.PhoneNumber;
+            updatedUser.CreatedAt = DateTime.UtcNow;
+
+            return await _userManager.UpdateAsync(updatedUser);
         }
-        public async Task<IdentityResult> ChangePasswordAsync(string userEmail, string oldPassword, string newPassword) 
+        public async Task<string?> GeneratePasswordResetTokenAsync(string email)
         {
-            if(userEmail != string.Empty && (oldPassword != newPassword)) 
-                return await _userRepository.ChangePasswordAsync(userEmail, oldPassword, newPassword);
+            var user = await _userManager.FindByEmailAsync(email);
 
-            return IdentityResult.Failed();
+            if (user == null)
+                return null;
+
+            return await _userManager.GeneratePasswordResetTokenAsync(user);
         }
-        public async Task<IdentityResult> EditAsync(Users user)
+        public async Task<IdentityResult> ResetPasswordAsync(string email, string token, string newPassword)
         {
-            if (user != null)
-                return await _userRepository.UpdateUserAsync(user);
+            var user = await _userManager.FindByEmailAsync(email);
 
-            return IdentityResult.Failed();
+            if (user == null)
+                return IdentityResult.Failed();
+
+            return await _userManager.ResetPasswordAsync(user, token, newPassword);
         }
-        public async Task SignOutAsync() => await _userRepository.SignOutUserAsync();
-
-        //Non-Identity Methods
-        public async Task<Users> GetByIdAsync(Guid userID) 
-        {
-            if (userID != Guid.Empty) 
-                return await _userRepository.GetUserByIdAsync(userID);
-
-            throw new InvalidOperationException("Empty Guid");
-        }
-        public async Task<Users> GetByEmailAsync(string userEmail) 
-        {
-            if(userEmail != null)
-                return await _userRepository.GetUserByUserEmailAsync(userEmail);
-
-            throw new InvalidOperationException("Username or email is null.");
-        }
-        public async Task<List<Users>> GetAllAsync() 
-        {
-            var listOfUsers = await _userRepository.GetAllUsersAsync();
-
-            if (listOfUsers != null)
-                return listOfUsers;
-
-            throw new InvalidOperationException("Could not retrieve list of users.");
-        }
+        public async Task<Users?> GetByIdAsync(Guid userID) => await _userRepository.GetUserByIdAsync(userID);
+        public async Task<List<Users>> GetAllAsync() => await _userRepository.GetAllUsersAsync();
+        public async Task LogoutAsync() => await _signInManager.SignOutAsync();
     }
 }
