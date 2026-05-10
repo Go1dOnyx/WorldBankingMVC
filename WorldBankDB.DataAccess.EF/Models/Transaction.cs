@@ -12,15 +12,15 @@ namespace WorldBankDB.DataAccess.EF.Models
     public class Transaction
     {
         public Guid TransactionId { get; set; }
-
-        [Column(TypeName = "decimal(18,2)")]
         public decimal Amount { get; set; }
         public TransactionType Type { get; set; }
         public DateTime TransactionDate { get; set; }
-        //Might need to add a description public string? Description
+        public string? TransactionDescription { get; set; }
 
-        //Foreign
+        //Foreign Key
         public Guid BankAccountId { get; set; }
+
+        //Navigational Propety
         public BankAccounts? BankAccount { get; set; }
     }
 }

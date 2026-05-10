@@ -1,5 +1,6 @@
 ﻿<link rel="stylesheet" href="~/css/userform.css" />
 @model AccountViewModel
+
 @{
     ViewData["Title"] = "WorldBank-User";
 }
@@ -13,21 +14,21 @@
             <h1>World Bank Accounts</h1>
         </div>
         <div class="acctInfo">
-            <h3>Username: @Model.UserName</h3>
-            <h3>Account ID: @Model.AccountID</h3>
+            <!--<h3>Email: @Model.EmailAddress</h3>-->
+            <!--<h3>Account ID: @Model.UserID</h3>-->
             <label>@Model.LastName, @Model.FirstName @Model.MiddleName?.Substring(0, 1).</label>
         </div>
 
         <!-----Checking Accout----------->
         <div class="fAccountContents checkContent">
             <label class="fItems">Checking Balance: </label>
-            <input class="fItems" type="text" for="depositAmount" value="@Model.CheckingAccount" readonly />
+            <!--<input class="fItems" type="text" for="depositAmount" value="Model.CheckingAccount" readonly />-->
 
 
             <!-----Deposit PopUp-->
             <div class="fPopUp" id="popUpDeposit" style="display: none;">
                 <form method="post">
-                    <input type="hidden" name="id" value="@Model.AccountID" />
+                    <!---<input type="hidden" name="id" value="@Model.UserID" />-->
 
                     <label class="fPopUpItems">Enter Number To Deposit: </label>
                     <input class="fPopUpItems" type="number" name="amount" placeholder="Enter Number" />
@@ -39,7 +40,7 @@
             <!---Widthdraw PopUp-->
             <div class="fPopUp" id="popUpWithdraw" style="display: none;">
                 <form method="post">
-                    <input type="hidden" name="id" value="@Model.AccountID" />
+                    <!--<input type="hidden" name="id" value="@Model.UserID" />-->
 
                     <label class="fPopUpItems">Enter Number To Withdraw: </label>
                     <input class="fPopUpItems" type="number" name="amount" placeholder="Enter Number" />
@@ -60,12 +61,12 @@
         <!----------------Saving Account-------------->
         <div class="fAccountContents savContent">
             <label class="fItems">Savings Balance: </label>
-            <input class="fItems" type="text" value="@Model.SavingsAccount" readonly />
+            <<!--<input class="fItems" type="text" value="Model.SavingsAccount" readonly />-->
 
             <!-----Deposit PopUp-->
             <div class="fPopUp" id="popUpDepSav" style="display: none;">
                 <form method="post">
-                    <input type="hidden" name="id" value="@Model.AccountID" />
+                    <!--<input type="hidden" name="id" value="@Model.UserID" />->
 
                     <label class="fPopUpItems">Enter Number To Deposit: </label>
                     <input class="fPopUpItems" type="number" name="amount" placeholder="Enter Number" />
@@ -77,7 +78,7 @@
             <!---Widthdraw PopUp-->
             <div class="fPopUp" id="popUpWithSav" style="display: none;">
                 <form method="post">
-                    <input type="hidden" name="id" value="@Model.AccountID" />
+                   <!-- <input type="hidden" name="id" value="@Model.UserID" />-->
 
                     <label class="fPopUpItems">Enter Number To Withdraw: </label>
                     <input class="fPopUpItems" type="number" name="amount" placeholder="Enter Number" />

@@ -7,13 +7,13 @@ namespace WorldBankDB.DataAccess.EF.Repositories
 {
     public class BankAccountRepository: IBankAccountRepository
     {
-        private WorldBankDBContext _context;
+        private readonly WorldBankDBContext _context;
         public BankAccountRepository(WorldBankDBContext context) 
         {
             _context = context;
         }
         public async Task<List<BankAccounts>> GetAllAccountsAsync() => await _context.BankAccounts.ToListAsync();
-        public async Task<BankAccounts?> GetAcctByIdAsync(Guid id) => await _context.BankAccounts.FindAsync(id);
+        public async Task<BankAccounts?> GetAcctByIdAsync(Guid accountId) => await _context.BankAccounts.FindAsync(id);
         public async Task<BankAccounts?> CreateAccountAsync(BankAccounts acct)
         {
             await _context.AddAsync(acct);
@@ -73,10 +73,12 @@ namespace WorldBankDB.DataAccess.EF.Repositories
                 throw;
             }
         }
-
+        public async Task<List<Transaction>> GetTransactionsByAccountIdAsync(Guid accountId)
+        {
+            return await _context.Transaction
+                .Where(t => t.BankAccountId == accountId)
+                .OrderByDescending(t => t.TransactionDate)
+                .ToListAsync();
+        }
     }
-
-
-    //find of confused what it returns...
-    //public async Task<BankAccounts?> GetTransactionsByIdAsync(Guid id) => await _context.BankAccounts.Include(e => e.Transactions).FirstOrDefaultAsync(e => e.BankAccountId == id);
 }

@@ -47,7 +47,7 @@ namespace WorldBankDB.DataAccess.EF.Context
 
                 entity.Property(e => e.Id)
                     .HasColumnName("UserID")
-                    .ValueGeneratedOnAdd();
+                    .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                 entity.Property(e => e.FirstName)
                     .IsRequired()
@@ -62,14 +62,14 @@ namespace WorldBankDB.DataAccess.EF.Context
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasConversion<int>() //allow us to store enum as an integer
-                    .HasDefaultValue(1);
+                    .HasMaxLength(50)
+                    .HasDefaultValue("Active");
 
                 entity.Property(e => e.CreatedAt)
                     .IsRequired()
                     .HasDefaultValueSql("GETUTCDATE()");
 
-                //Might need to delete or update this
+                //Might need to delete this since BankAccount already has foreign key relationship
                 entity.HasMany(e => e.BankAccounts)
                     .WithOne()
                     .HasForeignKey(a => a.UserId);
@@ -88,16 +88,23 @@ namespace WorldBankDB.DataAccess.EF.Context
 
                 entity.Property(e => e.BankAccountId)
                     .HasColumnName("BankAccountID")
-                    .ValueGeneratedOnAdd();
+                    .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                 entity.Property(e => e.AccountNum)
                     .UseIdentityColumn(seed: 4701755112279000, increment: 1)
                     .IsRequired();
 
-                entity.Property(e => e.AccountBalance).HasColumnType("decimal(18, 2)"); 
+                entity.Property(e => e.AccountBalance)
+                    .HasPrecision(18,2)
+                    .IsRequired(); 
 
                 entity.Property(e => e.RoutingNum)
                     .HasDefaultValue(121110001)
+                    .IsRequired();
+
+                entity.Property(e => e.AccountStatus)
+                    .HasConversion<string>()
+                    .HasDefaultValue("Active")
                     .IsRequired();
 
                 entity.HasOne(e => e.User)
@@ -112,19 +119,25 @@ namespace WorldBankDB.DataAccess.EF.Context
 
                 entity.Property(e => e.TransactionId)
                     .HasColumnName("TransactionID")
-                    .ValueGeneratedOnAdd();
+                    .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                 entity.Property(e => e.Amount)
                     .HasColumnType("decimal(18,2)")
                     .IsRequired();
 
-                entity.Property(e => e.Type).IsRequired();
+                entity.Property(e => e.Type)
+                    .HasConversion<string>()
+                    .IsRequired();
 
-                entity.Property(e => e.TransactionDate).IsRequired();
+                entity.Property(e => e.TransactionDate)
+                    .IsRequired();
+
+                entity.Property(e => e.TransactionDescription)
+                    .HasMaxLength(250)
+                    .IsRequired();
 
                 entity.HasOne(t => t.BankAccount)
                     .WithMany(e => e.Transactions)
-                    .HasForeignKey(t => t.BankAccountId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
