@@ -13,7 +13,7 @@ namespace WorldBankDB.DataAccess.EF.Repositories
             _context = context;
         }
         public async Task<List<BankAccounts>> GetAllAccountsAsync() => await _context.BankAccounts.ToListAsync();
-        public async Task<BankAccounts?> GetAcctByIdAsync(Guid accountId) => await _context.BankAccounts.FindAsync(id);
+        public async Task<BankAccounts?> GetAcctByIdAsync(Guid accountId) => await _context.BankAccounts.FindAsync(accountId);
         public async Task<BankAccounts?> CreateAccountAsync(BankAccounts acct)
         {
             await _context.AddAsync(acct);
