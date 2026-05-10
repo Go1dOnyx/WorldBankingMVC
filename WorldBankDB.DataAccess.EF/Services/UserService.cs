@@ -18,12 +18,13 @@ namespace WorldBankDB.DataAccess.EF.Services
         }
         public async Task<SignInResult> LoginAsync(string email, string password, bool rememberMe)
         {
+            //Handle password hashing on a separate service + salting
             var user = await _userManager.FindByEmailAsync(email);
 
             if (user == null)
                 return SignInResult.Failed;
-            if(user.Status != UserStatus.Active) 
-                return SignInResult.LockedOut;
+            if(user.Status != "Active") 
+                return SignInResult.NotAllowed;
 
             return await _signInManager.PasswordSignInAsync
                 (
@@ -35,6 +36,9 @@ namespace WorldBankDB.DataAccess.EF.Services
         }
         public async Task<IdentityResult> RegisterAsync(Users user) 
         {
+            //Instead of using Users model directly, it's preferred to use DTOs such as RegisterDto
+            //This Dto should include email, password, firstname, middlename, lastname, phone
+            //Handle password hashing on separate service + salting
             var newUser = new Users 
             {
                 Email = user.Email,
@@ -44,6 +48,7 @@ namespace WorldBankDB.DataAccess.EF.Services
                 LastName = user.LastName,
                 PhoneNumber = user.PhoneNumber,
                 CreatedAt = DateTime.UtcNow,
+                Status = "Active"
             };
 
             var result = await _userManager.CreateAsync(newUser, user.PasswordHash!);
@@ -104,3 +109,20 @@ namespace WorldBankDB.DataAccess.EF.Services
         public async Task LogoutAsync() => await _signInManager.SignOutAsync();
     }
 }
+
+
+/*
+ _userManager.CreateAsync()
+
+_userManager.UpdateAsync()
+
+_userManager.DeleteAsync()
+
+_userManager.ChangePasswordAsync()
+
+_userManager.CheckPasswordAsync()
+
+_userManager.AddToRoleAsync()
+
+_userManager.GeneratePasswordResetTokenAsync()
+ */
